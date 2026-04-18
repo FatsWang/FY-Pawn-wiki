@@ -23,17 +23,17 @@
 
 ## 💌 联系
 
-- **WeChat：** 18360861937
+- **WeChat：** 117610986288 
 
-- **QQ：** 2422676183
+- **QQ：** 759549436
 
-- **Email：** 18360861937@163.com
+- **Email：** 759549436@qq.com
 
-- **GitHub：** [https://github.com/wugenqiang](https://github.com/wugenqiang)
+- **Bilibili** [https://space.bilibili.com/354782208#/](https://space.bilibili.com/354782208#/)
 
-- **CSDN：** [https://blog.csdn.net/wugenqiang](https://blog.csdn.net/wugenqiang)
+- **CSDN：** [https://blog.csdn.net/BigGuanRen](https://blog.csdn.net/BigGuanRen)
 
-- **知乎：** [https://www.zhihu.com/people/wugenqiang/](https://www.zhihu.com/people/wugenqiang)
+- **知乎：** [https://www.zhihu.com/people/csjjwpp/](https://www.zhihu.com/people/csjjwpp)
 
 - **微信公众号：** 码客趣分享（扫码关注我呀 🥤）
 

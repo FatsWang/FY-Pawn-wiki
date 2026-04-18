@@ -316,6 +316,38 @@
       margin-bottom: 10px;
     }
 
+    /* =========================================
+       修复 Twikoo 评论区样式冲突与排版
+       ========================================= */
+    /* 评论区整体顶部留白和分割线 */
+    #tcomment {
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid #eaecef;
+    }
+
+    /* 强制显示输入框的边框和背景，解决“隐身”问题 */
+    .twikoo .el-input__inner,
+    .twikoo .el-textarea__inner {
+      background-color: #fafafa !important;
+      border: 1px solid #dcdfe6 !important;
+      color: #333 !important;
+    }
+
+    /* 昵称/邮箱前缀小块的样式修复 */
+    .twikoo .el-input-group__prepend {
+      background-color: #f5f7fa !important;
+      border: 1px solid #dcdfe6 !important;
+      border-right: none !important;
+      color: #909399 !important;
+    }
+
+    /* 鼠标点进去时边框高亮 */
+    .twikoo .el-input__inner:focus,
+    .twikoo .el-textarea__inner:focus {
+      border-color: #007be8 !important; /* 匹配你的主题蓝 */
+      background-color: #fff !important;
+    }
     /*滚动条样式 start*/
     /* 滚动条宽度 */
     ::-webkit-scrollbar{width:5px;}
@@ -415,8 +447,39 @@
           }
         }
       },
+      // 👇 从这里开始复制：新增的 plugins 配置，用于加载 Twikoo 评论区 👇
+      plugins: [
+        function (hook, vm) {
+          hook.doneEach(function() {
+            // 1. 获取 Docsify 渲染正文的核心容器
+            var markdownSection = document.querySelector('.markdown-section');
+            if (markdownSection) {
+              var twikooContainer = document.getElementById('tcomment');
+              
+              // 2. 如果不存在则创建；如果存在则清空内容（防止出现多个评论框）
+              if (!twikooContainer) {
+                twikooContainer = document.createElement('div');
+                twikooContainer.id = 'tcomment';
+              } else {
+                twikooContainer.innerHTML = ''; // 清空上一次残留的内容
+              }
+              
+              // 将评论框永远追加在当前文章内容的末尾
+              markdownSection.appendChild(twikooContainer);
+
+              // 3. 初始化 Twikoo
+              twikoo.init({
+                envId: 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app', // 你的 Vercel 环境 ID
+                el: '#tcomment',
+                path: location.pathname, // 【极其重要】区分不同页面的评论数据
+              });
+            }
+          });
+        }
+      ]
 
     }
+
   </script>
   <script src="https://notebook.js.org/plugin/js/docsify.min.js"></script>
   <script src="https://notebook.js.org/plugin/search.min.js"></script>
@@ -474,7 +537,7 @@
   <script src="https://notebook.js.org/plugin/js/prism-yaml.js"></script>
   <script src="https://notebook.js.org/plugin/js/prism-go.js"></script>
   <script src="https://notebook.js.org/plugin/js/prism-matlab.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js"></script>
   <!-- 使用 Gitter 实现一个 IM 即时通讯聊天室功能 -->
   <script>
     ((window.gitter = {}).chat = {}).options = {
