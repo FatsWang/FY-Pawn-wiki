@@ -1,6 +1,8 @@
 <div style="text-align: center; margin-top: 50px;">
-  <img src="images/icon.png" alt="icon" style="width: 120px; height: auto; border-radius: 50%;">
+  <img src="https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/icon.png""" alt="icon" style="width: 120px; height: auto; border-radius: 50%;">
 </div>
+
+
 
 ## Unreal Engine & 数字孪生 & 设计方案汇报
 
@@ -25,22 +27,23 @@
   <a href="https://www.fab.com/zh-cn/sellers/WangPangpang" target="_blank" style="background-color: #222; color: white; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
     Fab 商城
   </a>
-
+                                                                                                                                                                           
 </div>
 
-
-<span id="busuanzi_container_site_pv" style='display:none'>
-    👀 本站总访问量：<span id="busuanzi_value_site_pv"></span> 次
-</span>
-<span id="busuanzi_container_site_uv" style='display:none'>
-    | 🚴‍♂️ 本站总访客数：<span id="busuanzi_value_site_uv"></span> 人
-</span>
-
+<div style="text-align: center; margin-top: 20px; font-size: 14px; color: #666; line-height: 2;">
+  <span id="busuanzi_container_site_pv" style='display:none'>
+      👀 本站总访问量：<span id="busuanzi_value_site_pv"></span> 次
+  </span>
+  <span id="busuanzi_container_site_uv" style='display:none'>
+      | 🚴‍♂️ 本站总访客数：<span id="busuanzi_value_site_uv"></span> 人
+  </span>
+  <br>
+  ⏱️ <span id="sitetime">正在加载运行时间...</span>
+</div>
 
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-<span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
-
 <br>
 
-[开始阅读](/README.md)
+[开始阅读](#main)
+
