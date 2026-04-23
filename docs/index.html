@@ -339,10 +339,81 @@
       padding: 0 !important;
     }
   
+    
+/*===================================================================================================================================================================*/
+    /* =========================================
+       📄 iOS 风格文档卡片与图片美化
+       ========================================= */
+
+    /* 1. 核心：大圆角独立内容卡片 */
+    .ios-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 35px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0,0,0,0.03);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .ios-card:hover {
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    /* 卡片内的标题重置，去掉默认下划线 */
+    .ios-card h2 { margin-top: 0 !important; border-bottom: none !important; font-size: 1.6em; color: #1d1d1f; }
+    .ios-card h3 { font-size: 1.3em; color: #1d1d1f; margin-top: 25px !important; }
+
+    /* 2. 步骤胶囊标签（Step Pill） */
+    .ios-step {
+      display: inline-block;
+      background: linear-gradient(135deg, #007aff, #005bb5);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 15px 0 10px 0;
+      box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
+    }
+
+    /* 3. 图片完美居中与阴影包裹 */
+    .ios-img-box {
+      text-align: center;
+      margin: 30px 0;
+      padding: 10px;
+      background: #fbfbfd; /* 极浅的灰色底，衬托图片 */
+      border-radius: 16px;
+    }
+    .ios-img-box img {
+      max-width: 95%;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .ios-img-box img:hover { transform: scale(1.03); } /* 鼠标滑过图片 Q弹放大 */
+
+    /* 4. 重点文字高亮 */
+    .ios-highlight { color: #007aff; font-weight: 700; }
+    .ios-danger { color: #ff3b30; font-weight: 700; }
+
+    /* 5. 温馨提示框 (Callout) */
+    .ios-note {
+      background: rgba(0, 122, 255, 0.05);
+      border-left: 5px solid #007aff;
+      padding: 15px 20px;
+      border-radius: 0 12px 12px 0;
+      color: #333;
+      margin: 20px 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /*===================================================================================================================================================================*/
   </style>
 </head>
 <body>
-  <div id="app">🏃‍ 王胖胖的知识库正在加载中...</div>
+  <div id="app">🏃‍ 王胖胖的知识库正在加载中（建议开魔法更快哦 ~~  😏 ！）...</div>
 
   <script>
     window.$docsify = {
@@ -360,6 +431,8 @@
       auto2top: true,
       mergeNavbar: true,
       themeColor: '#007be8',
+      maxLevel: 6,       // 最大的内容表级别 [1]
+      subMaxLevel: 6,    // 将这一行的注释去掉，在自定义边栏中添加当前文章的目录（TOC) [1]
       
       // 搜索配置
       search: {
@@ -417,10 +490,10 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js"></script>
-
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
