@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>常胜将军王胖胖 - 个人知识库 🌹</title>
-  
+
   <link rel="icon" href="https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/wpp.ico">
-  
+
   <meta name="description" content="常胜将军王胖胖的 Java、前端与数字孪生学习笔记">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  
+
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/themes/buble.css">
 
   <link rel="stylesheet" href="https://notebook.js.org/plugin/css/katex.min.css" />
@@ -22,173 +22,37 @@
     table td { width: 10%; white-space:nowrap; }
     table thead{background-color:rgb(58, 140, 201); color: white;}
     table tr:nth-of-type(2n){background-color:rgb(246, 249, 252);}
-    
-
 
     /* =========================================侧边栏 iOS/iPadOS 质感美化========================================= */
-    
-    /* 1. 侧边栏整体：毛玻璃背景与柔和阴影 */
     .sidebar {
-      background-color: rgba(245, 245, 247, 0.75) !important; /* 苹果经典浅灰透色 */
+      background-color: rgba(245, 245, 247, 0.75) !important;
       backdrop-filter: blur(20px) !important;
       -webkit-backdrop-filter: blur(20px) !important;
       border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
       padding: 20px 15px !important;
       box-shadow: 2px 0 15px rgba(0,0,0,0.02) !important;
     }
+    .sidebar > h1 { font-weight: 700 !important; font-size: 1.3rem !important; margin-bottom: 30px !important; letter-spacing: -0.5px !important; }
+    .sidebar > h1 a { color: #1d1d1f !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; }
+    .sidebar ul li a { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; font-size: 15px !important; color: #515154 !important; padding: 10px 16px !important; margin-bottom: 4px !important; border-radius: 10px !important; border: none !important; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1) !important; display: block !important; }
+    .sidebar ul li a:hover { background-color: rgba(0, 0, 0, 0.05) !important; color: #1d1d1f !important; text-decoration: none !important; }
+    .sidebar ul li.active > a { background-color: #007aff !important; color: #ffffff !important; font-weight: 600 !important; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3) !important; }
+    aside.sidebar ul li.active > a:before { display: none !important; }
+    .sidebar ul li ul { padding-left: 12px !important; margin-top: 4px !important; }
+    .sidebar ul li ul li a { font-size: 14px !important; padding: 8px 16px !important; }
 
-    /* 2. 网站大标题优化 */
-    .sidebar > h1 {
-      font-weight: 700 !important;
-      font-size: 1.3rem !important;
-      margin-bottom: 30px !important;
-      letter-spacing: -0.5px !important;
-    }
-    .sidebar > h1 a {
-      color: #1d1d1f !important;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-    }
-
-    /* 3. 基础菜单项：圆角与舒适内边距 */
-    .sidebar ul li a {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-      font-size: 15px !important;
-      color: #515154 !important;
-      padding: 10px 16px !important;
-      margin-bottom: 4px !important;
-      border-radius: 10px !important; /* iOS 圆角矩形 */
-      border: none !important; /* 抹除原生主题的下划线 */
-      transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-      display: block !important;
-    }
-
-    /* 4. 鼠标悬停时的轻微底色反馈 */
-    .sidebar ul li a:hover {
-      background-color: rgba(0, 0, 0, 0.05) !important;
-      color: #1d1d1f !important;
-      text-decoration: none !important;
-    }
-
-    /* 5. 🌟 激活(Active)状态：苹果经典蓝高亮底色 */
-    .sidebar ul li.active > a {
-      background-color: #007aff !important; /* iOS 经典蓝 */
-      color: #ffffff !important;
-      font-weight: 600 !important;
-      box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3) !important;
-    }
-
-    /* 清理掉旧版的伪元素样式以防冲突 */
-    aside.sidebar ul li.active > a:before {
-      display: none !important; 
-    }
-
-    /* 6. 子菜单的层级缩进优化 */
-    .sidebar ul li ul {
-      padding-left: 12px !important;
-      margin-top: 4px !important;
-    }
-    .sidebar ul li ul li a {
-      font-size: 14px !important;
-      padding: 8px 16px !important;
-    }
-
-
-
-/* =============================================搜索框================================================================================================= */
-
-/* =========================================
-       🔍 搜索框与悬浮结果列表 iOS 质感美化
-       ========================================= */
-    
-    /* 1. 搜索框外层容器定位：为绝对定位的悬浮卡片做参照物 */
-    .sidebar .search {
-      position: relative !important;
-      padding: 10px 15px !important;
-      border-bottom: none !important;
-      margin-bottom: 10px !important;
-    }
-
-    /* 2. 输入框 iOS 风格化：圆角、浅灰底色、聚焦高亮 */
-    .sidebar .search input {
-      background-color: rgba(0, 0, 0, 0.05) !important;
-      border: 1px solid transparent !important;
-      border-radius: 10px !important;
-      padding: 8px 30px 8px 12px !important;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-      font-size: 14px !important;
-      color: #1d1d1f !important;
-      transition: all 0.3s ease !important;
-    }
-    .sidebar .search input:focus {
-      background-color: #fff !important;
-      border-color: #007aff !important; /* 苹果蓝 */
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2) !important;
-      outline: none !important;
-    }
-
-    /* 3. 🌟 核心：将搜索结果改为“悬浮毛玻璃卡片” */
-    .sidebar .search .results-panel {
-      position: absolute !important;
-      top: calc(100% + 5px) !important; /* 悬浮在输入框正下方 */
-      left: 10px !important;
-      right: 10px !important;
-      width: calc(100% - 20px) !important;
-      background: rgba(250, 250, 250, 0.85) !important; /* 半透明白底 */
-      backdrop-filter: blur(25px) !important; /* 强毛玻璃 */
-      -webkit-backdrop-filter: blur(25px) !important;
-      border-radius: 14px !important;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0,0,0,0.2) !important;
-      z-index: 9999 !important; /* 置于顶层，覆盖菜单 */
-      max-height: 50vh !important; /* 限制最大高度，内部可滚动 */
-      overflow-y: auto !important;
-      padding: 8px !important;
-    }
-
-    /* 4. 搜索结果内部排版优化 */
-    .sidebar .search .matching-post {
-      border-bottom: 1px solid rgba(0,0,0,0.05) !important;
-      padding: 8px 6px !important;
-      margin-bottom: 0 !important;
-      transition: background 0.2s !important;
-      border-radius: 8px !important;
-    }
-    .sidebar .search .matching-post:hover {
-      background: rgba(0,0,0,0.06) !important; /* 鼠标划过微反馈 */
-    }
-    .sidebar .search .matching-post:last-child {
-      border-bottom: none !important;
-    }
-    
-    /* 标题与摘要字体 */
-    .sidebar .search .matching-post h2 {
-      font-size: 14px !important;
-      font-weight: 600 !important;
-      color: #1d1d1f !important;
-      margin: 0 0 4px 0 !important;
-    }
-    .sidebar .search .matching-post p {
-      font-size: 12px !important;
-      color: #86868b !important;
-      margin: 0 !important;
-      line-height: 1.4 !important;
-    }
-    
-    /* 匹配到的高亮关键字文字：苹果蓝 + 加粗 */
-    .sidebar .search .matching-post p em {
-      color: #007aff !important; 
-      font-weight: bold !important;
-      font-style: normal !important;
-    }
-
-    /* 5. 修复右侧清除按钮（X）的位置 */
-    .sidebar .search .clear-button {
-      top: 18px !important;
-      right: 25px !important;
-      width: 16px !important;
-      height: 16px !important;
-    }
-
-/* =============================================搜索框================================================================================================= */
+    /* =========================================🔍 搜索框与悬浮结果列表 iOS 质感美化========================================= */
+    .sidebar .search { position: relative !important; padding: 10px 15px !important; border-bottom: none !important; margin-bottom: 10px !important; }
+    .sidebar .search input { background-color: rgba(0, 0, 0, 0.05) !important; border: 1px solid transparent !important; border-radius: 10px !important; padding: 8px 30px 8px 12px !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; font-size: 14px !important; color: #1d1d1f !important; transition: all 0.3s ease !important; }
+    .sidebar .search input:focus { background-color: #fff !important; border-color: #007aff !important; box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2) !important; outline: none !important; }
+    .sidebar .search .results-panel { position: absolute !important; top: calc(100% + 5px) !important; left: 10px !important; right: 10px !important; width: calc(100% - 20px) !important; background: rgba(250, 250, 250, 0.85) !important; backdrop-filter: blur(25px) !important; -webkit-backdrop-filter: blur(25px) !important; border-radius: 14px !important; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0,0,0,0.2) !important; z-index: 9999 !important; max-height: 50vh !important; overflow-y: auto !important; padding: 8px !important; }
+    .sidebar .search .matching-post { border-bottom: 1px solid rgba(0,0,0,0.05) !important; padding: 8px 6px !important; margin-bottom: 0 !important; transition: background 0.2s !important; border-radius: 8px !important; }
+    .sidebar .search .matching-post:hover { background: rgba(0,0,0,0.06) !important; }
+    .sidebar .search .matching-post:last-child { border-bottom: none !important; }
+    .sidebar .search .matching-post h2 { font-size: 14px !important; font-weight: 600 !important; color: #1d1d1f !important; margin: 0 0 4px 0 !important; }
+    .sidebar .search .matching-post p { font-size: 12px !important; color: #86868b !important; margin: 0 !important; line-height: 1.4 !important; }
+    .sidebar .search .matching-post p em { color: #007aff !important; font-weight: bold !important; font-style: normal !important; }
+    .sidebar .search .clear-button { top: 18px !important; right: 25px !important; width: 16px !important; height: 16px !important; }
 
     /* Twikoo 评论区适配 */
     #tcomment { margin-top: 60px; padding-top: 30px; border-top: 1px solid #eaecef; }
@@ -198,568 +62,428 @@
     ::-webkit-scrollbar{width:5px;}
     ::-webkit-scrollbar-thumb{ background-image: linear-gradient(#6ecd56, #33a9dc, #cb6196); border-radius: 2em; }
 
-
-
-
-
-    
-
-
-/* =========================================
-       封面弹幕墙 & 悬浮 Twikoo 样式 (V3 终极版)
-       ========================================= */
-    
-    /* 1. 右下角控制按钮组 */
-    #danmaku-controls {
-      position: fixed; right: 30px; bottom: 30px; z-index: 9999;
-      display: flex; gap: 12px; align-items: center;
-    }
-    .danmaku-btn {
-      color: white; border: none; padding: 10px 20px; border-radius: 30px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      cursor: pointer; font-weight: bold; transition: all 0.3s ease;
-    }
+    /* =========================================封面弹幕墙 & 悬浮 Twikoo 样式 (V3 终极版)========================================= */
+    #danmaku-controls { position: fixed; right: 30px; bottom: 30px; z-index: 9999; display: flex; gap: 12px; align-items: center; }
+    .danmaku-btn { color: white; border: none; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); cursor: pointer; font-weight: bold; transition: all 0.3s ease; }
     .danmaku-btn:hover { transform: translateY(-3px); }
-    
     #danmaku-switch { background: rgba(0, 123, 232, 0.9); }
-    #danmaku-send-btn { background: #4CAF50; display: none; } /* 默认隐藏发送按钮 */
+    #danmaku-send-btn { background: #4CAF50; display: none; }
+    #danmaku-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 998; overflow: hidden; display: none; }
+    .danmaku-item { position: absolute; display: flex; align-items: center; gap: 8px; padding: 4px 16px 4px 4px; background: rgba(0, 0, 0, 0.25); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border-radius: 50px; white-space: nowrap; will-change: transform; }
+    .danmaku-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.4); }
+    .danmaku-text { font-size: 16px; font-weight: 500; color: rgba(255, 255, 255, 0.95); text-shadow: 1px 1px 2px rgba(0,0,0,0.6); }
+    @keyframes danmaku-move { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
 
-    /* 2. 弹幕容器与单条弹幕 (增加头像排版) */
-    #danmaku-container {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 998; overflow: hidden; display: none;
-    }
-    
-    /* 胶囊底托排版 */
-    .danmaku-item {
-      position: absolute; display: flex; align-items: center; gap: 8px;
-      padding: 4px 16px 4px 4px; /* 右侧留白，左侧紧贴头像 */
-      background: rgba(0, 0, 0, 0.25); /* 半透明黑底，提升阅读性 */
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-      border-radius: 50px; white-space: nowrap;
-      will-change: transform;
-    }
-    
-    /* 头像样式 */
-    .danmaku-avatar {
-      width: 28px; height: 28px; border-radius: 50%;
-      object-fit: cover; border: 1px solid rgba(255,255,255,0.4);
-    }
-    
-    /* 文字样式 */
-    .danmaku-text {
-      font-size: 16px; font-weight: 500;
-      color: rgba(255, 255, 255, 0.95);
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-    }
-
-    @keyframes danmaku-move {
-      from { transform: translateX(100vw); }
-      to { transform: translateX(-100%); }
-    }
-
-    /* 3. 悬浮输入框 */
-    .danmaku-modal {
-      position: fixed; bottom: 15%; left: 50%; width: 90%; max-width: 600px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      padding: 20px 30px 10px 30px; border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 10000;
-      opacity: 0; visibility: hidden;
-      transform: translate(-50%, 50px) scale(0.8);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .danmaku-modal.active {
-      opacity: 1; visibility: visible; transform: translate(-50%, 0) scale(1);
-    }
-    .twikoo-modal-close {
-      position: absolute; top: 15px; right: 20px; font-size: 24px; 
-      cursor: pointer; color: #666; transition: color 0.2s;
-    }
+    .danmaku-modal { position: fixed; bottom: 15%; left: 50%; width: 90%; max-width: 600px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 20px 30px 10px 30px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 10000; opacity: 0; visibility: hidden; transform: translate(-50%, 50px) scale(0.8); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .danmaku-modal.active { opacity: 1; visibility: visible; transform: translate(-50%, 0) scale(1); }
+    .twikoo-modal-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #666; transition: color 0.2s; }
     .twikoo-modal-close:hover { color: #ff4757; }
 
-   /* ========================================================
-       🚨 终极物理防御：彻底隐藏评论区与网址框
-       ======================================================== */
-       
-    /* 1. 采用你的思路：给最外层容器加“紧箍咒”，强制截断！ */
-    /* Twikoo 无法删除我们的 .danmaku-modal 外壳，我们在这里卡死高度 */
-    .danmaku-modal {
-      max-height: 250px !important; /* 限制最大高度，刚好够容纳输入框和按钮 */
-      overflow: hidden !important;  /* 超出的评论区？直接物理“咔嚓”掉！ */
-    }
+    /* 🚨 终极物理防御：彻底隐藏评论区与网址框 */
+    .danmaku-modal { max-height: 250px !important; overflow: hidden !important; }
+    .danmaku-modal .tk-comments-title, .danmaku-modal .tk-comments-container, .danmaku-modal .tk-comments-no { display: none !important; visibility: hidden !important; height: 0 !important; margin: 0 !important; padding: 0 !important; opacity: 0 !important; }
+    .danmaku-modal .tk-meta-input > div:nth-child(3), .danmaku-modal .tk-meta-input > .el-input:nth-child(3) { display: none !important; width: 0 !important; height: 0 !important; overflow: hidden !important; }
+    .danmaku-modal .tk-meta-input { display: flex !important; gap: 10px; }
+    .danmaku-modal .tk-meta-input > div:nth-child(1), .danmaku-modal .tk-meta-input > div:nth-child(2) { flex: 1 !important; width: 50% !important; }
+    .danmaku-modal .tk-action-icon { display: none !important; visibility: hidden !important; width: 0 !important; height: 0 !important; }
+    .danmaku-modal .tk-preview, .danmaku-modal .tk-submit-action-icon { display: none !important; visibility: hidden !important; width: 0 !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
 
-    /* 2. 隐藏标题、评论列表（通过最外层父级类名穿透，不依赖 ID） */
-    .danmaku-modal .tk-comments-title,
-    .danmaku-modal .tk-comments-container,
-    .danmaku-modal .tk-comments-no {
-      display: none !important;
-      visibility: hidden !important;
-      height: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      opacity: 0 !important;
-    }
+    /* =========================================📄 iOS 风格文档卡片与图片美化 (整合转换器逻辑)========================================= */
+    .ios-title-section { text-align: center; padding: 10px 0 30px 0; }
+    .ios-title-section h1 { font-size: 2.2em; font-weight: 800; color: #1d1d1f; border: none !important; margin: 0; letter-spacing: -0.5px; }
 
-    /* 3. 精准爆破“网址”输入框（它是 .tk-meta-input 里的第 3 个元素） */
-    .danmaku-modal .tk-meta-input > div:nth-child(3),
-    .danmaku-modal .tk-meta-input > .el-input:nth-child(3) {
-      display: none !important;
-      width: 0 !important;
-      height: 0 !important;
-      overflow: hidden !important;
-    }
-
-    /* 4. 优化排版：网址框没之后，让剩下的“昵称”和“邮箱”平分宽度，看着更饱满 */
-    .danmaku-modal .tk-meta-input {
-      display: flex !important;
-      gap: 10px;
-    }
-    .danmaku-modal .tk-meta-input > div:nth-child(1),
-    .danmaku-modal .tk-meta-input > div:nth-child(2) {
-      flex: 1 !important;
-      width: 50% !important;
-    }
-
-    /* 5. 隐藏表情(OwO)和图片上传按钮，保持弹幕纯文本输入的极简感 */
-    .danmaku-modal .tk-action-icon {
-      display: none !important;
-      visibility: hidden !important;
-      width: 0 !important;
-      height: 0 !important;
-    }
-/* 👇 6. 新增：精准爆破“预览”按钮，只保留蓝色的“发送”按钮 👇 */
-    .danmaku-modal .tk-preview,
-    .danmaku-modal .tk-submit-action-icon {
-      display: none !important;
-      visibility: hidden !important;
-      width: 0 !important;
-      height: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-  
-    
-/*===================================================================================================================================================================*/
-    /* =========================================
-       📄 iOS 风格文档卡片与图片美化
-       ========================================= */
-
-    /* 1. 核心：大圆角独立内容卡片 */
-    .ios-card {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 30px 35px;
-      margin-bottom: 30px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(0,0,0,0.03);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .ios-card:hover {
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-      transform: translateY(-2px);
-    }
-
-    /* 卡片内的标题重置，去掉默认下划线 */
-    .ios-card h2 { margin-top: 0 !important; border-bottom: none !important; font-size: 1.6em; color: #1d1d1f; }
+    .ios-card { background: #ffffff; border-radius: 20px; padding: 30px 35px; margin-bottom: 30px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0,0,0,0.03); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .ios-card:hover { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+    .ios-card h2 { margin-top: 0 !important; border-bottom: 1px solid #f2f2f7 !important; padding-bottom: 15px; font-size: 1.6em; color: #1d1d1f; scroll-margin-top: 20px; }
     .ios-card h3 { font-size: 1.3em; color: #1d1d1f; margin-top: 25px !important; }
 
-    /* 2. 步骤胶囊标签（Step Pill） */
-    .ios-step {
-      display: inline-block;
-      background: linear-gradient(135deg, #007aff, #005bb5);
-      color: white;
-      padding: 6px 16px;
-      border-radius: 30px;
-      font-size: 14px;
-      font-weight: bold;
-      margin: 15px 0 10px 0;
-      box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
-    }
+    .ios-step { display: inline-block; background: linear-gradient(135deg, #007aff, #005bb5); color: white; padding: 6px 16px; border-radius: 30px; font-size: 14px; font-weight: bold; margin: 15px 0 10px 0; box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3); }
 
-    /* 3. 图片完美居中与阴影包裹 */
-    .ios-img-box {
-      text-align: center;
-      margin: 30px 0;
-      padding: 10px;
-      background: #fbfbfd; /* 极浅的灰色底，衬托图片 */
-      border-radius: 16px;
-    }
-    .ios-img-box img {
-      max-width: 95%;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .ios-img-box img:hover { transform: scale(1.03); } /* 鼠标滑过图片 Q弹放大 */
+    .ios-img-box { text-align: center; margin: 30px 0; padding: 15px; background: #fbfbfd; border-radius: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+    .ios-img-box img { max-width: 95%; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .ios-img-box img:hover { transform: scale(1.02); }
 
-    /* 4. 重点文字高亮 */
-    .ios-highlight { color: #007aff; font-weight: 700; }
+    .ios-highlight { background: #f2f2f7; color: #007aff; padding: 3px 8px; border-radius: 6px; font-size: 0.9em; font-family: monospace; font-weight: 600; margin: 0 3px; }
     .ios-danger { color: #ff3b30; font-weight: 700; }
+    .ios-note { background: rgba(0, 122, 255, 0.05); border-left: 5px solid #007aff; padding: 15px 20px; border-radius: 0 12px 12px 0; color: #333; margin: 20px 0; font-size: 15px; line-height: 1.6; }
 
-    /* 5. 温馨提示框 (Callout) */
-    .ios-note {
-      background: rgba(0, 122, 255, 0.05);
-      border-left: 5px solid #007aff;
-      padding: 15px 20px;
-      border-radius: 0 12px 12px 0;
-      color: #333;
-      margin: 20px 0;
-      font-size: 15px;
-      line-height: 1.6;
-    }
-
-    /*===================================================================================================================================================================*/
+    /* =========================================🌟 新增：右侧悬浮页内目录 (玻璃态) ========================================= */
+    .ios-toc-widget { position: fixed; right: 30px; top: 40%; transform: translateY(-50%); width: 200px; max-height: 60vh; background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(0,0,0,0.08); padding: 20px 15px; z-index: 990; overflow-y: auto; }
+    .ios-toc-widget::-webkit-scrollbar { width: 4px; }
+    .ios-toc-widget::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 10px; }
+    .ios-toc-header { font-size: 13px; font-weight: 700; color: #86868b; margin-bottom: 15px; padding-left: 8px; display: flex; align-items: center; }
+    .ios-toc-item { display: block; padding: 8px 12px; color: #1d1d1f; text-decoration: none !important; font-size: 13px; font-weight: 500; border-radius: 8px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: all 0.2s; }
+    .ios-toc-item:hover { background: rgba(0, 122, 255, 0.1); color: #007aff; }
+    /* 👇 新增这一行：目录激活时的高亮样式 👇 */
+    .ios-toc-item.active { background: rgba(0, 122, 255, 0.1); color: #007aff; font-weight: 600; border-left: 3px solid #007aff; border-radius: 4px 8px 8px 4px; }
+    /* 适配窄屏幕隐藏右侧目录以免遮挡内容 */
+    @media (max-width: 1200px) { .ios-toc-widget { display: none !important; } }
   </style>
 </head>
 <body>
-  <div id="app">🏃‍ 王胖胖的知识库正在加载中（建议开魔法更快哦 ~~  😏 ！）...</div>
+<div id="app">🏃‍ 王胖胖的知识库正在加载中（建议开魔法更快哦 ~~  😏 ！）...</div>
 
-  <script>
-    window.$docsify = {
-      name: "🌈 常胜将军王胖胖",
-      nameLink: '/',
-      // // 【注释】这里换成你自己的 GitHub 仓库
-      // repo: 'FatsWang/FY-Pawn-wiki', 
-      
-      coverpage: true,
-      onlyCover: false,
-      executeScript: true,
-      loadSidebar: true,
-      loadNavbar: true,
-      autoHeader: true,
-      auto2top: true,
-      mergeNavbar: true,
-      themeColor: '#007be8',
-      maxLevel: 6,       // 最大的内容表级别 [1]
-      subMaxLevel: 6,    // 将这一行的注释去掉，在自定义边栏中添加当前文章的目录（TOC) [1]
-      
-      // 搜索配置
-      search: {
-        paths: 'auto',
-        placeholder: '🔍 搜索关键字...',
-        noData: '😒 找不到结果',
-        depth: 6,
+<script>
+  window.$docsify = {
+    name: "🌈 常胜将军王胖胖",
+    nameLink: '/',
+    coverpage: true,
+    onlyCover: false,
+    executeScript: true,
+    loadSidebar: true,
+    loadNavbar: true,
+    autoHeader: true,
+    auto2top: true,
+    mergeNavbar: true,
+    themeColor: '#007be8',  
+    
+    
+    search: {
+      paths: 'auto',
+      placeholder: '🔍 搜索关键字...',
+      noData: '😒 找不到结果',
+      depth: 6,
+    },
+
+    pagination: {
+      previousText: '上一篇',
+      nextText: '下一篇',
+      crossChapter: true
+    },
+
+    plugins: [
+      // 1. Twikoo 评论系统注入
+      function (hook, vm) {
+        hook.doneEach(function() {
+          var twikooContainer = document.getElementById('tcomment');
+          if (twikooContainer) {
+            twikoo.init({
+              envId: 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app',
+              el: '#tcomment',
+              path: "/cover-danmaku",
+            });
+          }
+        });
       },
-
-      // 分页导航
-      pagination: {
-        previousText: '上一篇',
-        nextText: '下一篇',
-        crossChapter: true
+      // 2. 标题固定格式控制插件
+      function (hook, vm) {
+        hook.doneEach(function () {
+          const baseTitle = "常胜将军王胖胖 - 个人知识库 🌹";
+          const pageName = document.querySelector('h1') ? document.querySelector('h1').innerText : '正文';
+          if (vm.route.path === '/') {
+            document.title = baseTitle + " - 首页";
+          } else {
+            document.title = baseTitle + " - " + pageName;
+          }
+        });
       },
+      // 🌟 3. 新增：iOS 风格 MD 实时转换与悬浮目录插件 🌟
+      function(hook, vm) {
+        hook.afterEach(function(html, next) {
+          // ⚠️ 步骤 1：检测并移除屏蔽标识符
+          let showToc = true;
+          if (html.includes('不展示目录')) {
+            showToc = false;
+            // 将页面中的标识符静默移除，不影响用户阅读
+            html = html.replace(/<p>不展示目录<\/p>|不展示目录/g, '');
+          }
 
-      plugins: [
-        // 插件：Twikoo 评论系统注入
-        function (hook, vm) {
-          hook.doneEach(function() {
-            // 让 Docsify 去找当前页面有没有我们手动放置的评论容器
-            var twikooContainer = document.getElementById('tcomment');
-            if (twikooContainer) {
-              // 只有找到了，才在这个页面初始化 Twikoo
-              twikoo.init({
-                envId: 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app',
-                el: '#tcomment',
-                path: "/cover-danmaku",
+          const parserDiv = document.createElement('div');
+          parserDiv.innerHTML = html;
+          const finalDiv = document.createElement('div');
+
+          let currentCard = null;
+          let titleSection = null;
+          let tocData = [];
+
+          Array.from(parserDiv.childNodes).forEach(node => {
+            if (node.nodeType === 3 && node.textContent.trim() === '') return;
+            const getNodeId = (n) => n.id || n.getAttribute('data-id') || 'ios-ref-' + Math.random().toString(36).substr(2, 5);
+
+            if (node.tagName === 'H1') {
+              const id = getNodeId(node);
+              node.id = id;
+              tocData.push({ level: 1, text: node.innerText, id: id });
+              titleSection = document.createElement('div');
+              titleSection.className = 'ios-title-section';
+              titleSection.appendChild(node.cloneNode(true));
+              finalDiv.appendChild(titleSection);
+              return;
+            }
+
+            if (node.tagName === 'H2') {
+              const id = getNodeId(node);
+              node.id = id;
+              tocData.push({ level: 2, text: node.innerText, id: id });
+              currentCard = document.createElement('div');
+              currentCard.className = 'ios-card';
+              currentCard.appendChild(node.cloneNode(true));
+              finalDiv.appendChild(currentCard);
+              return;
+            }
+
+            const newNode = node.cloneNode(true);
+            if (newNode.nodeType === 1) {
+              newNode.querySelectorAll('code').forEach(c => {
+                if (c.parentNode && c.parentNode.tagName !== 'PRE') {
+                  const span = document.createElement('span');
+                  span.className = 'ios-highlight';
+                  span.innerHTML = c.innerHTML;
+                  c.parentNode.replaceChild(span, c);
+                }
               });
+              if (newNode.tagName === 'P' && newNode.querySelector('img')) {
+                const imgBox = document.createElement('div');
+                imgBox.className = 'ios-img-box';
+                newNode.querySelectorAll('img').forEach(img => imgBox.appendChild(img.cloneNode(true)));
+                if (currentCard) currentCard.appendChild(imgBox);
+                else finalDiv.appendChild(imgBox);
+                return;
+              }
             }
+            if (currentCard) currentCard.appendChild(newNode);
+            else finalDiv.appendChild(newNode);
           });
-        },
-        // 🌟 2. 新增：标题固定格式控制插件
-        function (hook, vm) {
-          hook.doneEach(function () {
-            const baseTitle = "常胜将军王胖胖 - 个人知识库 🌹";
-            // 获取当前页面的标题文字（如果有 h1 标题则取标题，否则显示“正文”）
-            const pageName = document.querySelector('h1') ? document.querySelector('h1').innerText : '正文';
-            
-            // 如果是首页（路径为 /），显示首页，否则显示具体的页面名
-            if (vm.route.path === '/') {
-              document.title = baseTitle + " - 首页";
-            } else {
-              document.title = baseTitle + " - " + pageName;
+
+          // ⚠️ 步骤 2：条件渲染目录 DOM
+          let tocHtml = '';
+          if (showToc && tocData.length > 0) {
+            tocHtml = `<div class="ios-toc-widget"><div class="ios-toc-header">📍 章节导览</div>`;
+            tocData.forEach(item => {
+              tocHtml += `<a href="javascript:void(0);" data-target-id="${item.id}" class="ios-toc-item" style="padding-left: ${item.level === 1 ? '8px' : '16px'}">${item.text}</a>`;
+            });
+            tocHtml += `</div>`;
+          }
+          next(tocHtml + finalDiv.innerHTML);
+        });
+
+        hook.doneEach(function() {
+          // 每次切换页面时，先清理旧的滚动监听，防止内存泄漏
+          if (window.iosScrollSpy) {
+            window.removeEventListener('scroll', window.iosScrollSpy);
+          }
+
+          // ⚠️ 步骤 3：检测当前页面是否真的生成了目录结构
+          const tocWidget = document.querySelector('.ios-toc-widget');
+          if (!tocWidget) return; // 如果没有目录，直接 return，不消耗任何性能
+
+          // 绑定点击跳转
+          document.querySelectorAll('.ios-toc-item').forEach(link => {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              const id = link.getAttribute('data-target-id');
+              const targetEl = document.getElementById(id);
+              if(targetEl) {
+                const y = targetEl.getBoundingClientRect().top + window.pageYOffset - 30;
+                window.scrollTo({top: y, behavior: 'smooth'});
+              }
+            });
+          });
+
+          // 绑定滚动监听
+          window.iosScrollSpy = function() {
+            let currentId = '';
+            const scrollY = window.pageYOffset;
+            const headings = Array.from(document.querySelectorAll('.ios-card h2, .ios-title-section h1'));
+
+            for (let i = headings.length - 1; i >= 0; i--) {
+              const heading = headings[i];
+              if (heading.id) {
+                if (scrollY >= (heading.getBoundingClientRect().top + window.pageYOffset - 100)) {
+                  currentId = heading.id;
+                  break;
+                }
+              }
             }
-          });
-        }
-      ]
-    };
-  </script>
 
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+            if (currentId) {
+              document.querySelectorAll('.ios-toc-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-target-id') === currentId) {
+                  item.classList.add('active');
+                }
+              });
+            } else if (scrollY < 50 && headings.length > 0) {
+              document.querySelectorAll('.ios-toc-item').forEach(item => item.classList.remove('active'));
+              const firstItem = document.querySelector(`.ios-toc-item[data-target-id="${headings[0].id}"]`);
+              if (firstItem) firstItem.classList.add('active');
+            }
+          };
 
-
-  <!-- /*↓↓↓↓↓↓↓↓回归到页面顶部↓↓↓↓↓↓↓↓*/ -->
-  <script src="plugin/jquery.js"></script>
-  <script src="plugin/jquery.goup.js"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function () {
-      $.goup({
-        trigger: 100,
-        bottomOffset: 32,
-        locationOffset: 32,
-        title: 'TOP',
-        titleAsText: true
-      });
-    });
-  </script>
-<!-- //↑↑↑↑↑↑↑ 回归到页面顶部↑↑↑↑↑↑↑↑ -->
-
-  <script>
-    document.addEventListener('click', function(e) {
-      const target = e.target.closest('a');
-      // 监听包含“开始阅读”或“进入”字样的链接
-      if (target && (target.innerText.includes('开始阅读') || target.innerText.includes('进入'))) {
-        e.preventDefault();
-        window.scrollTo({
-          top: window.innerHeight,
-          behavior: 'smooth'
+          window.addEventListener('scroll', window.iosScrollSpy);
+          window.iosScrollSpy();
         });
       }
-    });
+      
+    ]
+  };
+</script>
 
-  
-  </script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
 
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="plugin/jquery.js"></script>
+<script src="plugin/jquery.goup.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $.goup({ trigger: 100, bottomOffset: 32, locationOffset: 32, title: 'TOP', titleAsText: true });
+  });
+</script>
 
+<script>
+  document.addEventListener('click', function(e) {
+    const target = e.target.closest('a');
+    if (target && (target.innerText.includes('开始阅读') || target.innerText.includes('进入'))) {
+      e.preventDefault();
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    }
+  });
+</script>
 
-<!-- 点击出爱心 -->
-  <!-- mouse click -->
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
 <script src="plugin/click_heart.js"></script>
-<!-- 点击出爱心 -->
 
-
-
-<!-- ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓复制文章出现弹窗↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ -->
-
-<!-- alert 样式 -->
 <link rel="stylesheet" href="plugin/sweetalert.min.css" type='text/css' media='all' />
-
-<!-- 复制提醒 -->
 <script src="plugin/sweetalert.min.js"></script>
 <script>
   document.body.oncopy = function () {
-    swal("复制成功 🎉",
-            "如果有遇到问题 ，欢迎联系我哦~     \n   V：17610986288 😊   \n- by 王胖胖 ",
-        
-            "success"); };
+    swal("复制成功 🎉", "如果有遇到问题 ，欢迎联系我哦~     \n   V：17610986288 😊   \n- by 王胖胖 ", "success");
+  };
 </script>
 
-<!-- ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑复制文章出现弹窗↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ↑ ↑ ↑ -->
+<script>
+  function siteTime() {
+    window.setTimeout("siteTime()", 1000);
+    var t1 = Date.UTC(2026, 3, 22, 10, 0, 0);
+    var today = new Date();
+    var t2 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
+    var diff = t2 - t1;
 
-<!-- 网站运行时间 -->
- <script>
-    function siteTime() {
-      window.setTimeout("siteTime()", 1000);
-      
-      // 1. 设置你的部署日期（年, 月, 日, 时, 分, 秒）
-      // 注意：月份从 0 开始计数，0代表1月，3代表4月，以此类推。
-      // 比如 2024年4月13日 21:12:00 应该写成 Date.UTC(2026, 3, 13, 21, 12, 0)
-      var t1 = Date.UTC(2026, 3, 22, 10, 0, 0); 
-      
-      var today = new Date();
-      var t2 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds());
-      var diff = t2 - t1;
-      
-      var seconds = 1000;
-      var minutes = seconds * 60;
-      var hours = minutes * 60;
-      var days = hours * 24;
-      var years = days * 365;
-      
-      var diffYears = Math.floor(diff / years);
-      var diffDays = Math.floor((diff / days) - diffYears * 365);
-      var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
-      var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
-      var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
-      
-      var documentElement = document.getElementById("sitetime");
-      if(documentElement) {
-        documentElement.innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分 " + diffSeconds + " 秒 ";
-      }
+    var seconds = 1000, minutes = seconds * 60, hours = minutes * 60, days = hours * 24, years = days * 365;
+
+    var diffYears = Math.floor(diff / years);
+    var diffDays = Math.floor((diff / days) - diffYears * 365);
+    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+
+    var documentElement = document.getElementById("sitetime");
+    if(documentElement) {
+      documentElement.innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分 " + diffSeconds + " 秒 ";
     }
-    siteTime();
-
-
-
-  </script>
-
-
-
-
-
-<!-- 弹幕功能 -->
-
+  }
+  siteTime();
+</script>
 
 <div id="danmaku-controls">
   <button id="danmaku-send-btn" class="danmaku-btn" onclick="toggleDanmakuModal()">💬 发送弹幕</button>
   <button id="danmaku-switch" class="danmaku-btn">✨ 开启弹幕</button>
 </div>
-
 <div id="danmaku-container"></div>
-
 <div id="twikoo-modal" class="danmaku-modal">
   <span class="twikoo-modal-close" onclick="closeDanmakuModal()" title="收起输入框">×</span>
   <h3 style="margin-top: 0; text-align: center; color: #333; font-size: 1.1em;">发射弹幕 🚀</h3>
   <div id="tcomment-cover"></div>
 </div>
 
+<script>
+  const TWIKOO_ENV_ID = 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app';
+  let danmakuActive = false;
+  let danmakuTimer = null;
+  let commentsData = [];
 
+  const switchBtn = document.getElementById('danmaku-switch');
+  const sendBtn = document.getElementById('danmaku-send-btn');
+  const danmakuContainer = document.getElementById('danmaku-container');
+  const modal = document.getElementById('twikoo-modal');
+  let twikooCoverInited = false;
 
+  function fetchComments() {
+    twikoo.getRecentComments({ envId: TWIKOO_ENV_ID, pageSize: 50, includeReply: false })
+            .then(function (res) {
+              commentsData = res.map(item => {
+                return { text: item.commentText || item.comment, avatar: item.avatar || 'https://cravatar.cn/avatar/?d=mp' };
+              });
+              if(danmakuActive && commentsData.length > 0 && !danmakuTimer) startDanmakuEngine();
+            }).catch(err => console.error("获取弹幕失败:", err));
+  }
 
-  <script>
-    // 配置你的 Twikoo 环境 ID
-    const TWIKOO_ENV_ID = 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app';
-    let danmakuActive = false;
-    let danmakuTimer = null;
-    let commentsData = [];
+  function shootDanmaku() {
+    if (!danmakuActive || commentsData.length === 0) return;
+    const data = commentsData[Math.floor(Math.random() * commentsData.length)];
+    const el = document.createElement('div');
+    el.className = 'danmaku-item';
+    el.innerHTML = `<img src="${data.avatar}" class="danmaku-avatar" onerror="this.src='https://cravatar.cn/avatar/?d=mp'" /><span class="danmaku-text">${data.text}</span>`;
+    el.style.bottom = (10 + Math.random() * 50) + '%';
 
-    const switchBtn = document.getElementById('danmaku-switch');
-    const sendBtn = document.getElementById('danmaku-send-btn');
-    const danmakuContainer = document.getElementById('danmaku-container');
-    const modal = document.getElementById('twikoo-modal');
-    let twikooCoverInited = false;
+    const colors = ['#ffffff', '#f8f9fa', '#e3f2fd', '#fff3e0', '#fce4ec'];
+    el.querySelector('.danmaku-text').style.color = colors[Math.floor(Math.random() * colors.length)];
 
-    // 获取最新评论数据 (提取头像和文本)
-    function fetchComments() {
-      twikoo.getRecentComments({
-        envId: TWIKOO_ENV_ID,
-        pageSize: 50, 
-        includeReply: false 
-      }).then(function (res) {
-        // 将数据映射为包含 text 和 avatar 的对象数组
-        commentsData = res.map(item => {
-          return {
-            text: item.commentText || item.comment,
-            // 如果没有头像，使用 Cravatar 的默认神秘人头像
-            avatar: item.avatar || 'https://cravatar.cn/avatar/?d=mp' 
-          };
-        });
-        
-        if(danmakuActive && commentsData.length > 0 && !danmakuTimer) {
-          startDanmakuEngine();
-        }
-      }).catch(err => console.error("获取弹幕失败:", err));
+    const duration = 7 + Math.random() * 8;
+    el.style.animation = `danmaku-move ${duration}s linear forwards`;
+    danmakuContainer.appendChild(el);
+    setTimeout(() => { el.remove(); }, duration * 1000);
+  }
+
+  function startDanmakuEngine() {
+    if(danmakuTimer) clearInterval(danmakuTimer);
+    danmakuTimer = setInterval(shootDanmaku, 1500);
+  }
+
+  switchBtn.addEventListener('click', () => {
+    danmakuActive = !danmakuActive;
+    if (danmakuActive) {
+      switchBtn.innerText = '🚫 关闭弹幕';
+      switchBtn.style.background = '#ff4757';
+      sendBtn.style.display = 'block';
+      danmakuContainer.style.display = 'block';
+      fetchComments();
+    } else {
+      switchBtn.innerText = '✨ 开启弹幕';
+      switchBtn.style.background = 'rgba(0, 123, 232, 0.9)';
+      sendBtn.style.display = 'none';
+      danmakuContainer.style.display = 'none';
+      if(danmakuTimer) { clearInterval(danmakuTimer); danmakuTimer = null; }
+      closeDanmakuModal();
     }
+  });
 
-    // 弹幕发射引擎 (带头像渲染)
-    function shootDanmaku() {
-      if (!danmakuActive || commentsData.length === 0) return;
-      
-      // 随机抽取一条数据
-      const data = commentsData[Math.floor(Math.random() * commentsData.length)];
-      
-      const el = document.createElement('div');
-      el.className = 'danmaku-item';
-      
-      // 组装带头像的 HTML
-      el.innerHTML = `
-        <img src="${data.avatar}" class="danmaku-avatar" onerror="this.src='https://cravatar.cn/avatar/?d=mp'" />
-        <span class="danmaku-text">${data.text}</span>
-      `;
-      
-      const bottomPercent = 10 + Math.random() * 50; 
-      el.style.bottom = bottomPercent + '%';
-      
-      // 随机文字颜色 (应用于 span)
-      const colors = ['#ffffff', '#f8f9fa', '#e3f2fd', '#fff3e0', '#fce4ec'];
-      el.querySelector('.danmaku-text').style.color = colors[Math.floor(Math.random() * colors.length)];
-      
-      const duration = 7 + Math.random() * 8;
-      el.style.animation = `danmaku-move ${duration}s linear forwards`;
-      danmakuContainer.appendChild(el);
-      
-      setTimeout(() => { el.remove(); }, duration * 1000);
-    }
-
-    function startDanmakuEngine() {
-      if(danmakuTimer) clearInterval(danmakuTimer);
-      danmakuTimer = setInterval(shootDanmaku, 1500);
-    }
-
-    // ✨ 开启/关闭 弹幕主开关逻辑
-    switchBtn.addEventListener('click', () => {
-      danmakuActive = !danmakuActive;
-      if (danmakuActive) {
-        // 开启状态
-        switchBtn.innerText = '🚫 关闭弹幕';
-        switchBtn.style.background = '#ff4757'; // 红色
-        sendBtn.style.display = 'block'; // 显示发送按钮
-        danmakuContainer.style.display = 'block';
-        
-        fetchComments(); // 每次开启时拉取最新数据
-        // 【关键修改】：删除了 openDanmakuModal()，开启时不再自动弹输入框
-        
-      } else {
-        // 关闭状态
-        switchBtn.innerText = '✨ 开启弹幕';
-        switchBtn.style.background = 'rgba(0, 123, 232, 0.9)'; // 蓝色
-        sendBtn.style.display = 'none'; // 隐藏发送按钮
-        danmakuContainer.style.display = 'none';
-        
-        if(danmakuTimer) {
-          clearInterval(danmakuTimer);
-          danmakuTimer = null;
-        }
-        closeDanmakuModal(); // 关闭弹幕时强制收起输入框
+  function toggleDanmakuModal() {
+    const isOpening = !modal.classList.contains('active');
+    if (isOpening) {
+      modal.classList.add('active');
+      sendBtn.innerText = '🔼 收起输入';
+      if(!twikooCoverInited) {
+        twikoo.init({ envId: TWIKOO_ENV_ID, el: '#tcomment-cover', path: '/cover-danmaku' });
+        twikooCoverInited = true;
       }
-    });
+    } else { closeDanmakuModal(); }
+  }
 
-    // 🌟 核心逻辑：切换输入框 (发送弹幕 <-> 收起输入)
-    function toggleDanmakuModal() {
-      const isOpening = !modal.classList.contains('active');
-      if (isOpening) {
-        modal.classList.add('active');
-        sendBtn.innerText = '🔼 收起输入'; // 弹出时改变按钮文字
-        
-        if(!twikooCoverInited) {
-          twikoo.init({
-            envId: TWIKOO_ENV_ID,
-            el: '#tcomment-cover',
-            path: '/cover-danmaku'
-          });
-          twikooCoverInited = true;
-        }
-      } else {
-        closeDanmakuModal();
-      }
+  function closeDanmakuModal() {
+    modal.classList.remove('active');
+    sendBtn.innerText = '💬 发送弹幕';
+  }
+
+  setInterval(() => { if(danmakuActive) fetchComments(); }, 15000);
+
+  document.body.addEventListener('click', function(e) {
+    if (e.target.closest('.tk-submit-action') || e.target.closest('.el-button--primary')) {
+      setTimeout(() => { fetchComments(); closeDanmakuModal(); }, 2000);
     }
-
-    // 单独提取收起逻辑，保证面板收起时按钮文字复原
-    function closeDanmakuModal() {
-      modal.classList.remove('active');
-      sendBtn.innerText = '💬 发送弹幕'; // 恢复按钮文字
-    }
-
-    // 🚀 核心优化：实时刷新机制
-    setInterval(() => {
-      if(danmakuActive) fetchComments();
-    }, 15000);
-
-    // 监听提交按钮：发送成功后，自动收起面板并立即拉取数据
-    document.body.addEventListener('click', function(e) {
-      if (e.target.closest('.tk-submit-action') || e.target.closest('.el-button--primary')) {
-         setTimeout(() => {
-            fetchComments(); 
-            closeDanmakuModal(); // 发送后自动关闭，文字也会自动变回"发送弹幕"
-         }, 2000);
-      }
-    });
-  </script>
-
-
-
+  });
+</script>
 </body>
 </html>

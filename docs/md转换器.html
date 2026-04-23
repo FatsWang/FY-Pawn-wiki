@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS 风格 Markdown 转换器 (含悬浮目录)</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
+            --accent: #007aff;
+            --border-color: #d2d2d7;
+            --radius-card: 18px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; gap: 20px; height: 100vh; box-sizing: border-box;
+        }
+
+        /* 编辑器布局 */
+        .workspace { display: flex; gap: 20px; height: 40vh; flex-shrink: 0; }
+        .panel { flex: 1; display: flex; flex-direction: column; background: #fff; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; }
+        .panel-header { background: #fdfdfd; padding: 10px 16px; font-weight: 600; font-size: 13px; border-bottom: 1px solid var(--border-color); color: var(--text-sub); }
+        textarea { flex: 1; border: none; padding: 15px; font-family: monospace; font-size: 13px; resize: none; outline: none; background: #fafafa; }
+
+        /* 预览区 */
+        .preview-container { flex: 1; background: #fff; border-radius: 12px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .preview-content { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-color); scroll-behavior: smooth; }
+
+        /* =========================================
+           iOS 风格内容样式 (保持并优化)
+           ========================================= */
+        .ios-preview-wrapper { max-width: 900px; margin: 0 auto; position: relative; }
+        .ios-title-section { text-align: center; padding: 40px 0 30px 0; }
+        .ios-title-section h1 { font-size: 2.2em; font-weight: 800; color: #1d1d1f; margin: 0; }
+        .ios-card { background: #fff; border-radius: var(--radius-card); padding: 30px; margin-bottom: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
+        .ios-card h2 { font-size: 1.5em; border-bottom: 1px solid #f2f2f7; padding-bottom: 12px; margin-top: 0; color: #1d1d1f; scroll-margin-top: 20px; }
+        .ios-img-box { border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin: 20px 0; transition: transform 0.3s ease; display: flex; flex-wrap: wrap; justify-content: center; background: #f9f9f9; padding: 10px; }
+        .ios-img-box:hover { transform: scale(1.01); }
+        .ios-img-box img { max-width: 100%; border-radius: 8px; }
+        .ios-highlight { background: #f2f2f7; color: var(--accent); padding: 2px 6px; border-radius: 6px; font-size: 0.9em; font-family: monospace; }
+        .ios-step { display: inline-block; background: var(--accent); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 600; margin: 10px 0; }
+
+        /* =========================================
+           悬浮目录窗口 (新增)
+           ========================================= */
+        .ios-toc-widget {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 180px;
+            max-height: 70vh;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 20px 10px;
+            z-index: 999;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .ios-toc-widget::-webkit-scrollbar { width: 4px; }
+        .ios-toc-widget::-webkit-scrollbar-thumb { background: #d2d2d7; border-radius: 10px; }
+
+        .ios-toc-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ios-toc-item {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: background 0.2s;
+        }
+
+        .ios-toc-item:hover { background: rgba(0, 122, 255, 0.1); color: var(--accent); }
+        
+        /* 针对预览区的目录（预览专用） */
+        #preview-toc { position: absolute; right: 20px; top: 100px; transform: none; }
+    </style>
+</head>
+<body>
+
+    <div class="workspace">
+        <div class="panel">
+            <div class="panel-header">📝 输入区 (Markdown)</div>
+            <textarea id="input-md" placeholder="输入 Markdown..."></textarea>
+        </div>
+        <div class="panel">
+            <div class="panel-header">💻 输出区 (HTML 代码)</div>
+            <textarea id="output-html" readonly></textarea>
+        </div>
+    </div>
+
+    <div class="preview-container">
+        <div class="panel-header">✨ 预览区</div>
+        <div id="preview-toc-container"></div> <div class="preview-content" id="preview-scroll-root">
+            <div id="preview" class="ios-preview-wrapper"></div>
+        </div>
+    </div>
+
+    <script>
+        const inputMd = document.getElementById('input-md');
+        const outputHtml = document.getElementById('output-html');
+        const previewDiv = document.getElementById('preview');
+        const tocContainer = document.getElementById('preview-toc-container');
+
+        function generateID(text) {
+            return 'ios-ref-' + Math.random().toString(36).substr(2, 5);
+        }
+
+        function convert() {
+            const rawMd = inputMd.value;
+            if (!rawMd.trim()) return;
+
+            const rawHtml = marked.parse(rawMd);
+            const parserDiv = document.createElement('div');
+            parserDiv.innerHTML = rawHtml;
+            const finalDiv = document.createElement('div');
+            
+            let currentCard = null;
+            let titleSection = null;
+            let tocData = [];
+
+            const nodes = Array.from(parserDiv.childNodes);
+            
+            nodes.forEach((node, i) => {
+                if (node.nodeType === 3 && node.textContent.trim() === '') return;
+
+                // 处理 H1
+                if (node.tagName === 'H1') {
+                    const id = generateID(node.innerText);
+                    node.id = id;
+                    tocData.push({ level: 1, text: node.innerText, id: id });
+
+                    titleSection = document.createElement('div');
+                    titleSection.className = 'ios-title-section';
+                    titleSection.appendChild(node.cloneNode(true));
+                    finalDiv.appendChild(titleSection);
+                    return;
+                }
+
+                // 处理 H2
+                if (node.tagName === 'H2') {
+                    const id = generateID(node.innerText);
+                    node.id = id;
+                    tocData.push({ level: 2, text: node.innerText, id: id });
+
+                    currentCard = document.createElement('div');
+                    currentCard.className = 'ios-card';
+                    currentCard.appendChild(node.cloneNode(true));
+                    finalDiv.appendChild(currentCard);
+                    return;
+                }
+
+                // 内容处理
+                const newNode = node.cloneNode(true);
+                if (newNode.nodeType === 1) {
+                    // 行内代码高亮
+                    newNode.querySelectorAll('code').forEach(c => {
+                        if (c.parentNode.tagName !== 'PRE') {
+                            const span = document.createElement('span');
+                            span.className = 'ios-highlight';
+                            span.innerHTML = c.innerHTML;
+                            c.parentNode.replaceChild(span, c);
+                        }
+                    });
+
+                    // 图片处理
+                    if (newNode.tagName === 'P' && newNode.querySelector('img')) {
+                        const imgBox = document.createElement('div');
+                        imgBox.className = 'ios-img-box';
+                        newNode.querySelectorAll('img').forEach(img => imgBox.appendChild(img));
+                        if (currentCard) currentCard.appendChild(imgBox);
+                        else finalDiv.appendChild(imgBox);
+                        return;
+                    }
+                }
+
+                if (currentCard) currentCard.appendChild(newNode);
+                else finalDiv.appendChild(newNode);
+            });
+
+            // 生成目录 HTML
+            let tocHtml = `<div class="ios-toc-widget">
+                <div class="ios-toc-header">📍 快速导览</div>`;
+            tocData.forEach(item => {
+                tocHtml += `<a href="#${item.id}" class="ios-toc-item" style="padding-left: ${item.level === 1 ? '12px' : '20px'}">${item.text}</a>`;
+            });
+            tocHtml += `</div>`;
+
+            // 更新输出与预览
+            const finalContent = tocHtml + finalDiv.innerHTML;
+            outputHtml.value = finalContent;
+            previewDiv.innerHTML = finalDiv.innerHTML;
+            tocContainer.innerHTML = tocHtml;
+
+            // 给预览区的目录绑定平滑滚动逻辑
+            document.querySelectorAll('#preview-toc-container .ios-toc-item').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').slice(1);
+                    const targetEl = document.getElementById(targetId);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        }
+
+        inputMd.addEventListener('input', convert);
+    </script>
+</body>
+</html>

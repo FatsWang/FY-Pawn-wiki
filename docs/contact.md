@@ -4,9 +4,10 @@
 
 ## 📞 联系方式
 
-- **邮箱：** your-email@example.com
+- **邮箱：** 759549436@qq.com
 - **GitHub：** [FatsWang](https://github.com/FatsWang)
-- **微信/QQ：** *请留言咨询*
+- **QQ：** **759549436**
+- **微信：** **17610986288**
 
 ## 💼 服务范围
 
