@@ -6,7 +6,7 @@
 ### 🖌️ 互动涂鸦墙
 
 <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 20px; margin-bottom: 40px;">
-  <iframe src="https://excalidraw.com/" 
+  <iframe src="hhttps://excalidraw.com/#room=6a2171fd22f759be69a8,7NZEVtW3LM-rfRvbrJmeXQ" 
           width="100%" 
           style="height: 60vh; min-height: 500px; border: none;" 
           allowfullscreen>
