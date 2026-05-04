@@ -1,3 +1,4 @@
+
 <div style="text-align: center; margin-top: 50px;">
   <img src="https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/icon.png""" alt="icon" style="width: 120px; height: auto; border-radius: 50%;">
 </div>

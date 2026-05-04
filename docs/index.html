@@ -121,7 +121,8 @@
   </style>
 </head>
 <body>
-<div id="app">🏃‍ 王胖胖的知识库正在加载中（建议开魔法更快哦 ~~  😏 ！）...</div>
+  
+<div id="app">🏃‍ 王胖胖的知识库正在加载中（建议开魔法🪄更快哦 ~~  😏 ！）...</div>
 
 <script>
   window.$docsify = {
@@ -131,12 +132,12 @@
     onlyCover: false,
     executeScript: true,
     loadSidebar: true,
-    loadNavbar: true,
+    loadNavbar: false,
     autoHeader: true,
     auto2top: true,
     mergeNavbar: true,
     themeColor: '#007be8',  
-    
+   
     
     search: {
       paths: 'auto',
@@ -145,11 +146,6 @@
       depth: 6,
     },
 
-    pagination: {
-      previousText: '上一篇',
-      nextText: '下一篇',
-      crossChapter: true
-    },
 
     plugins: [
       // 1. Twikoo 评论系统注入
@@ -158,7 +154,7 @@
           var twikooContainer = document.getElementById('tcomment');
           if (twikooContainer) {
             twikoo.init({
-              envId: 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app',
+              envId: 'https://twikoo.fywpp.top',
               el: '#tcomment',
               path: "/cover-danmaku",
             });
@@ -282,8 +278,47 @@
 
           // 绑定滚动监听
           window.iosScrollSpy = function() {
-            let currentId = '';
+
             const scrollY = window.pageYOffset;
+            const tocWidget = document.querySelector('.ios-toc-widget');
+
+            // 🌟 目录动态显隐核心逻辑 🌟
+            if (tocWidget) {
+              tocWidget.style.transition = 'opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease';
+              
+              let isShow = false; // 1. 所有页面默认置为不显示
+
+              if (vm.route.path === '/') {
+                // 2. 首页逻辑：滚动超过屏幕高度的 70% (即滚过封面) 才显示
+                if (scrollY >= window.innerHeight * 0.7) {
+                  isShow = true;
+                }
+              } else {
+                // 3. 非首页逻辑：只要稍微往下滚一下 (例如 50px) 就显示
+                if (scrollY > 50) {
+                  isShow = true;
+                }
+              }
+
+              // 统一应用样式
+              if (isShow) {
+                tocWidget.style.opacity = '1';
+                tocWidget.style.visibility = 'visible';
+                tocWidget.style.transform = 'translateY(-50%)'; 
+                tocWidget.style.pointerEvents = 'auto';
+              } else {
+                tocWidget.style.opacity = '0';
+                tocWidget.style.visibility = 'hidden';
+                tocWidget.style.transform = 'translateY(-45%)'; 
+                tocWidget.style.pointerEvents = 'none';
+              }
+            }
+
+
+
+            
+            let currentId = '';
+           
             const headings = Array.from(document.querySelectorAll('.ios-card h2, .ios-title-section h1'));
 
             for (let i = headings.length - 1; i >= 0; i--) {
@@ -323,21 +358,73 @@
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+
 <script src="//cdn.jsdelivr.net/npm/twikoo@1.6.39/dist/twikoo.all.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-markup.min.js"></script>
+
+
 <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.min.js"></script>
+
 <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-javascript.min.js"></script>
+
 <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
 
-<script src="plugin/jquery.js"></script>
-<script src="plugin/jquery.goup.js"></script>
-<script type="text/javascript">
-  $(document).ready(function () {
-    $.goup({ trigger: 100, bottomOffset: 32, locationOffset: 32, title: 'TOP', titleAsText: true });
+<style>
+  /* 原生回到顶部按钮样式 (契合你的 iOS 风格) */
+  #native-goup {
+    position: fixed;
+    bottom: 80px;
+    right: 32px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #1d1d1f;
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 9990;
+  }
+  #native-goup:hover {
+    background: #007aff;
+    color: #fff;
+    transform: translateY(0);
+    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.3);
+  }
+  #native-goup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  // 原生回到顶部逻辑
+  document.addEventListener("DOMContentLoaded", function() {
+    const goUpBtn = document.createElement('div');
+    goUpBtn.id = 'native-goup';
+    goUpBtn.innerText = 'TOP';
+    document.body.appendChild(goUpBtn);
+
+    // 监听滚动，超过 100px 显示按钮
+    window.addEventListener('scroll', function() {
+      if (window.scrollY >= 100) {
+        goUpBtn.classList.add('show');
+      } else {
+        goUpBtn.classList.remove('show');
+      }
+    });
+
+    // 点击平滑滚动到顶部
+    goUpBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   });
 </script>
 
@@ -362,6 +449,9 @@
     swal("复制成功 🎉", "如果有遇到问题 ，欢迎联系我哦~     \n   V：17610986288 😊   \n- by 王胖胖 ", "success");
   };
 </script>
+
+
+
 
 <script>
   function siteTime() {
@@ -399,7 +489,7 @@
 </div>
 
 <script>
-  const TWIKOO_ENV_ID = 'https://twikoo-backend-jwk0fa2se-fatswangs-projects.vercel.app';
+  const TWIKOO_ENV_ID = 'https://twikoo.fywpp.top';
   let danmakuActive = false;
   let danmakuTimer = null;
   let commentsData = [];
