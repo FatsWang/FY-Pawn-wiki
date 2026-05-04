@@ -32,9 +32,18 @@
 俗话说一图胜千言，视频教程更直观！强烈建议在阅读文档前，先观看我在 B 站录制的使用演示：
 
 * ▶️ **[B站视频：[FyPawn] 保姆级入门与实战演示](https://www.bilibili.com/video/BV1f6DfBoEHy)**
+<div style="display: flex;flex-wrap: wrap; justify-content: flex-start; align-items: stretch; ">
+    <div style="width: 600px; height: 400px;flex-grow: 0;min-width: 100px;margin: 10px;">
+          <iframe src="//player.bilibili.com/player.html?aid=116379470596994&bvid=BV1f6DfBoEHy&cid=37388747694&p=1&autoplay=0" style="width: 100%; height: 100%;" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+ </div>
+
+
+
+</div>
+
+
 
 * ▶️ **[B站视频：[FyPawn] 核心原理与设计思路（录制中）](https://www.bilibili.com/video/BV1f6DfBoEHy)**
-
 ---
 
 
