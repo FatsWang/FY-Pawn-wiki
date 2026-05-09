@@ -148,6 +148,29 @@
 
 
     plugins: [
+// 备案信息注入插件
+function(hook) {
+      var footer = [
+        '<hr/>',
+        '<footer style="text-align: center; margin: 40px 0 20px 0; color: #999; font-size: 13px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">',
+        '  <span>Copyright © 2024 - 至今 | 常胜将军王胖胖</span><br/>',
+        '  <a href="https://space.bilibili.com/354782208#/" target="_blank" style="color: #999; text-decoration: none; border-bottom: 1px dashed #ccc;">📺 B站主页</a>',
+        //换行字符    
+        '&nbsp; &nbsp;|&nbsp; &nbsp;',
+        '  <a href="https://www.fab.com/zh-cn/sellers/WangPangpang" target="_blank" style="color: #999; text-decoration: none; border-bottom: 1px dashed #ccc;">🛒 Fab 插件商城</a>',
+
+        '&nbsp; &nbsp;|&nbsp; &nbsp;',
+        '  <a href="https://beian.miit.gov.cn/" target="_blank" style="color: #999; text-decoration: none; border-bottom: 1px dashed #ccc;">冀ICP备2025107215号-1</a>',
+        '</footer>'
+      ].join('');
+
+      hook.afterEach(function(html) {
+        return html + footer;
+      });
+    },
+
+
+
       // 1. Twikoo 评论系统注入
       function (hook, vm) {
         hook.doneEach(function() {
@@ -402,6 +425,20 @@
     visibility: visible;
     transform: translateY(0);
   }
+
+  footer a:hover {
+  color: #007aff !important; /* 经典的 iOS 蓝色 */
+  border-bottom: 1px solid #007aff !important;
+  transition: all 0.3s ease;
+}
+
+/* 适配手机端间距 */
+@media screen and (max-width: 768px) {
+  footer {
+    margin-top: 30px !important;
+    padding-bottom: 20px;
+  }
+}
 </style>
 
 <script>
@@ -580,6 +617,11 @@
       setTimeout(() => { fetchComments(); closeDanmakuModal(); }, 2000);
     }
   });
+
 </script>
+
+
+
 </body>
+ 
 </html>

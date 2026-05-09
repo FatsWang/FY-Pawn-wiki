@@ -103,14 +103,4 @@
 
 ---
 
-## 🎁 彩蛋
-👉 点个关注不过分吧 😏  
-👉 有问题？红包一发，马上开干 💥  
 
----
-
-<div style="text-align: center; color: #86868b; font-size: 13px; margin-top: 40px;">
-  Designed by 王胖胖 in Unreal World.<br>
-  <a href="https://space.bilibili.com/354782208#/" target="_blank" style="color:#007aff; text-decoration:none;">📺 B站主页</a> &nbsp;|&nbsp; 
-  <a href="https://www.fab.com/zh-cn/sellers/WangPangpang" target="_blank" style="color:#007aff; text-decoration:none;">🛒 Fab 插件商城</a>
-</div>

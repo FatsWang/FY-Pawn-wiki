@@ -1,7 +1,8 @@
 - [🏠首页 (Home)](/)
 - [🤝联系我 (Contact)](contact.md)
 - [🎨涂鸦留言板 (Board)](board.md)
-- [📒更新日志](CHANGELOG.md)
+- [💬 文字留言区](messages.md)
+- 
 - **📚 技术笔记**
 
   - [💡 教程与技巧](tutorials/README.md)
