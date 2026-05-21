@@ -1,4 +1,4 @@
-- [🏠首页 (Home)](/)
+- [🏠首页 (Home)](README.md)
 - [🤝联系我 (Contact)](contact.md)
 - [🎨涂鸦留言板 (Board)](board.md)
 - [💬 文字留言区](messages.md)

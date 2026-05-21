@@ -127,7 +127,9 @@
 <script>
   window.$docsify = {
     name: "🌈 常胜将军王胖胖",
-    nameLink: '/',
+    nameLink: window.location.pathname.replace(/\/[^/]*$/, '') || '/',
+    basePath: window.location.pathname.replace(/\/[^/]*$/, '') || '/',
+    notFoundPage: '_404.md',
     coverpage: true,
     onlyCover: false,
     executeScript: true,
