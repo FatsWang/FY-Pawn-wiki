@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WPPMachineAuth 授权码生成器</title>
+<script>
+// Electron 环境检测：桌面版无需额外处理，HTML 完全复用
+if (typeof process !== 'undefined' && process.versions && process.versions.electron) {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.title = 'WPPMachineAuth 授权码生成器 (本地版)';
+  });
+}
+</script>
+<script src="./jsencrypt.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0b0e17;--card:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);
+  --accent:#00d4aa;--accent2:#00b4d8;--danger:#ff4757;--warn:#ffa502;--text:#e8e8e8;--muted:#666;
+}
+body{font-family:'Segoe UI','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:30px 16px}
+h1{font-size:1.6em;margin-bottom:4px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{color:var(--muted);font-size:.82em;margin-bottom:28px}
+
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:12px;padding:4px;flex-wrap:wrap;justify-content:center}
+.tab{padding:10px 20px;border-radius:10px;cursor:pointer;font-size:.88em;transition:all .25s;
+  color:var(--muted);border:none;background:transparent;white-space:nowrap}
+.tab:hover{color:var(--text)}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600}
+
+.panel{display:none;width:100%;max-width:620px;animation:fadeUp .35s ease}
+.panel.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;
+  backdrop-filter:blur(16px);margin-bottom:20px}
+
+label{display:block;font-size:.82em;color:var(--muted);margin-bottom:6px;margin-top:16px}
+label:first-child{margin-top:0}
+
+input,textarea,select{width:100%;padding:11px 14px;border-radius:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);
+  font-size:.92em;outline:none;transition:border-color .3s;font-family:inherit;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+select{appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select option{background:#1a1f35;color:var(--text);padding:8px}
+select option:hover{background:rgba(0,212,170,.15)}
+textarea{min-height:80px;font-family:'Consolas','Courier New',monospace;font-size:.82em;line-height:1.5}
+
+button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-weight:600;
+  cursor:pointer;transition:all .25s;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;width:100%;margin-top:20px}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-primary:active{transform:scale(.98)}
+.btn-sm{padding:8px 16px;font-size:.82em;background:rgba(255,255,255,.1);color:var(--text);margin-top:8px;margin-right:6px}
+.btn-sm:hover{background:rgba(255,255,255,.18)}
+.btn-danger{background:rgba(255,71,87,.15);color:var(--danger);border:1px solid rgba(255,71,87,.25);font-size:.82em;padding:6px 12px}
+.btn-danger:hover{background:rgba(255,71,87,.25)}
+
+.row{display:flex;gap:14px}
+.row>div{flex:1}
+
+.result{margin-top:20px;padding:18px;border-radius:12px;display:none}
+.result.show{display:block;animation:fadeUp .3s ease}
+.result.success{background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.2)}
+.result.error{background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.2)}
+.result h3{font-size:.95em;margin-bottom:10px}
+.result.success h3{color:var(--accent)}
+.result.error h3{color:var(--danger)}
+.license-output{word-break:break-all;font-family:'Consolas','Courier New',monospace;
+  background:rgba(0,0,0,.3);padding:14px;border-radius:8px;font-size:.78em;line-height:1.6;
+  color:#0f0;user-select:all;cursor:text;max-height:180px;overflow-y:auto}
+
+.info-grid{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin-top:12px;font-size:.83em}
+.info-grid dt{color:var(--muted)}
+.info-grid dd{color:var(--text)}
+
+.key-status{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;
+  font-size:.85em;margin-bottom:14px}
+.key-status.ok{background:rgba(0,212,170,.1);color:var(--accent)}
+.key-status.no{background:rgba(255,71,87,.1);color:var(--danger)}
+
+.tip{background:rgba(0,180,216,.08);border:1px solid rgba(0,180,216,.15);border-radius:10px;
+  padding:14px 18px;font-size:.82em;line-height:1.6;color:rgba(255,255,255,.7);margin-top:16px}
+.tip strong{color:var(--accent2)}
+
+/* ===== 密钥列表 ===== */
+.key-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.key-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,.03);cursor:pointer;transition:all .25s}
+.key-item:hover{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.06)}
+.key-item.active{border-color:var(--accent);background:rgba(0,212,170,.06);box-shadow:0 0 0 1px var(--accent)}
+.key-icon{font-size:1.4em;flex-shrink:0}
+.key-info{flex:1;min-width:0}
+.key-name{font-size:.92em;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.key-meta{font-size:.75em;color:var(--muted);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.key-meta span{white-space:nowrap}
+.key-actions{display:flex;gap:6px;flex-shrink:0}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.7em;font-weight:600}
+.badge-size{background:rgba(0,180,216,.15);color:var(--accent2)}
+.badge-count{background:rgba(255,165,2,.15);color:var(--warn)}
+
+.empty-state{text-align:center;padding:30px 20px;color:var(--muted);font-size:.9em;line-height:1.6}
+.empty-state .icon{font-size:2.4em;margin-bottom:8px}
+
+/* ===== 生成面板的密钥选择器 ===== */
+.key-selector{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;
+  border:1px solid var(--border);background:rgba(255,255,255,.03);margin-bottom:6px}
+.key-selector .key-info{flex:1}
+.key-selector select{width:100%;margin-top:4px}
+
+/* ===== 历史记录 ===== */
+.history-list{max-height:300px;overflow-y:auto;margin-top:8px}
+.history-item{padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.03);
+  border:1px solid var(--border);margin-bottom:6px;font-size:.82em}
+.history-item .h-project{color:var(--accent2);font-weight:600}
+.history-item .h-machine{color:var(--text);font-family:monospace;font-size:.9em}
+.history-item .h-date{color:var(--muted);font-size:.85em;margin-top:2px}
+
+/* ===== Modal ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;
+  align-items:center;justify-content:center;padding:16px}
+.modal-overlay.show{display:flex}
+.modal{background:#161b2e;border:1px solid var(--border);border-radius:16px;padding:28px;
+  width:100%;max-width:500px;animation:fadeUp .25s ease}
+.modal h3{margin-bottom:18px;font-size:1.05em}
+
+@media(max-width:560px){
+  .row{flex-direction:column;gap:0}
+  .card{padding:20px}
+  .key-item{flex-wrap:wrap}
+  .key-actions{width:100%;justify-content:flex-end;margin-top:6px}
+  .tabs{gap:2px;padding:3px}
+  .tab{padding:8px 14px;font-size:.82em}
+}
+</style>
+</head>
+<body>
+
+<h1>WPPMachineAuth UE5 授权码生成器</h1>
+<p class="subtitle"> RSA 加密 · 多项目密钥管理 </p>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('generate')">生成授权码</button>
+  <button class="tab" onclick="switchTab('keys')">密钥管理</button>
+  <button class="tab" onclick="switchTab('history')">签发记录</button>
+  <button class="tab" onclick="switchTab('help')">使用说明</button>
+</div>
+
+<!-- ==================== 生成授权码面板 ==================== -->
+<div class="panel show" id="panel-generate">
+  <div class="card">
+    <!-- 密钥选择器 -->
+    <label style="margin-top:0">当前使用的密钥对</label>
+    <div class="key-selector" id="keySelector">
+      <div class="key-info">
+        <select id="activeKeySelect" onchange="onSelectActiveKey()">
+          <option value="">-- 请选择密钥对 --</option>
+        </select>
+      </div>
+    </div>
+    <div class="key-status no" id="keyStatus">
+      <span>⚠️ 未选择密钥，请先到「密钥管理」创建或导入</span>
+    </div>
+
+    <label for="machineCode">客户机器码 *</label>
+    <input type="text" id="machineCode" placeholder="例如: UE5-A1B2-C3D4-E5F6">
+
+    <div class="row">
+      <div>
+        <label for="validDays">授权天数</label>
+        <input type="number" id="validDays" value="365" min="1" max="3650">
+      </div>
+      <div>
+        <label for="maxUsage">最大次数 (-1=不限)</label>
+        <input type="number" id="maxUsage" value="-1" min="-1">
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="generateLicense()">生成授权码</button>
+
+    <div class="result" id="resultBox">
+      <h3 id="resultTitle"></h3>
+      <div class="license-output" id="licenseCode"></div>
+      <button class="btn-sm" onclick="copyLicense()">📋 复制到剪贴板</button>
+      <dl class="info-grid" id="infoGrid"></dl>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 密钥管理面板 ==================== -->
+<div class="panel" id="panel-keys">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="font-size:1.05em">密钥对列表</h3>
+      <button class="btn-sm" onclick="openNewKeyModal()" style="margin:0">+ 新建密钥对</button>
+    </div>
+
+    <div id="keyListContainer"></div>
+  </div>
+
+  <div class="tip">
+    <strong>关于密钥唯一性：</strong>每次生成 RSA 密钥对时，都会从两个超大素数中随机计算。
+    2048 位密钥的碰撞概率为 1/2^2048（约 1/10^616），两个人生成相同密钥的概率为零。
+    <br><br>
+    <strong>推荐做法：</strong>每个 UE5 项目使用独立的密钥对，这样即使某个项目的私钥泄露，其他项目不受影响。
+  </div>
+</div>
+
+<!-- ==================== 签发记录面板 ==================== -->
+<div class="panel" id="panel-history">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h3 style="font-size:1.05em">签发记录</h3>
+      <button class="btn-danger" onclick="clearHistory()" style="margin:0;padding:6px 12px">清空记录</button>
+    </div>
+    <div id="historyContainer" class="history-list"></div>
+  </div>
+</div>
+
+<!-- ==================== 使用说明面板 ==================== -->
+<div class="panel" id="panel-help">
+  <div class="card">
+    <h3 style="margin-bottom:14px;font-size:1.05em">完整使用流程</h3>
+    <div style="font-size:.88em;line-height:1.8;color:rgba(255,255,255,.75)">
+      <p><strong style="color:var(--accent)">第一步：创建密钥对</strong></p>
+      <ol style="margin-left:20px;margin-bottom:16px">
+        <li>切换到「密钥管理」标签页</li>
+        <li>点击「+ 新建密钥对」，输入项目名称和密钥长度</li>
+        <li>生成后导出私钥 .pem 文件备份到安全位置</li>
+        <li>复制公钥，粘贴到 UE5 代码的 GetPublicKey() 中</li>
+      </ol>
+
+      <p><strong style="color:var(--accent)">第二步：签发授权码</strong></p>
+      <ol style="margin-left:20px;margin-bottom:16px">
+        <li>在「生成授权码」页面选择密钥对</li>
+        <li>输入客户机器码和授权天数</li>
+        <li>点击生成，复制授权码发给客户</li>
+      </ol>
+
+      <p><strong style="color:var(--accent)">第三步：客户激活</strong></p>
+      <ol style="margin-left:20px;margin-bottom:16px">
+        <li>客户在 UE5 应用中粘贴授权码</li>
+        <li>VerifyLicenseKey() 用公钥解密并校验</li>
+        <li>通过后 SaveLicenseToLocal 保存，下次自动验证</li>
+      </ol>
+
+      <p><strong style="color:var(--accent2)">多项目架构</strong></p>
+      <div style="background:rgba(0,0,0,.3);padding:14px;border-radius:8px;margin-top:8px;font-size:.88em;line-height:1.7">
+        项目A 的 UE5 代码里 → 嵌入密钥对A 的公钥<br>
+        项目B 的 UE5 代码里 → 嵌入密钥对B 的公钥<br>
+        项目C 的 UE5 代码里 → 嵌入密钥对C 的公钥<br><br>
+        用密钥对A签发的授权码 → 只能被项目A验证<br>
+        用密钥对B签发的授权码 → 只能被项目B验证<br>
+        <strong style="color:var(--accent)">互不干扰，私钥泄露只影响单个项目</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 新建密钥对 Modal ==================== -->
+<div class="modal-overlay" id="newKeyModal">
+  <div class="modal">
+    <h3>新建密钥对</h3>
+    <label for="newKeyName" style="margin-top:0">项目名称 *</label>
+    <input type="text" id="newKeyName" placeholder="例如: 我的第一款游戏">
+
+    <div class="row">
+      <div>
+        <label>密钥长度</label>
+        <select id="newKeySize">
+          <option value="1024">1024 位</option>
+          <option value="2048" selected>2048 位 </option>
+          <option value="4096">4096 位</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:12px;border-radius:8px;background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.2);font-size:.82em;color:var(--warn)">
+      💡 2048 位是安全与速度的最佳平衡。1024 较为简单，4096 位生成较慢且授权码更长。
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn-primary" onclick="createNewKeyPair()" style="margin:0">生成</button>
+      <button class="btn-sm" onclick="closeModal('newKeyModal')" style="margin:0;flex:1;text-align:center">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 查看密钥详情 Modal ==================== -->
+<div class="modal-overlay" id="keyDetailModal">
+  <div class="modal" style="max-width:580px">
+    <h3 id="detailTitle">密钥详情</h3>
+
+    <label style="margin-top:0">私钥 (机密！绝不放入 UE 项目)</label>
+    <textarea id="detailPrivateKey" rows="6" readonly></textarea>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn-sm" onclick="exportDetailKey('private')">导出私钥 .pem</button>
+      <button class="btn-sm" onclick="copyDetailKey('private')">📋 复制私钥</button>
+    </div>
+
+    <label>公钥 (嵌入 UE5 C++ 代码)</label>
+    <textarea id="detailPublicKey" rows="6" readonly></textarea>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn-sm" onclick="exportDetailKey('public')">导出公钥 .pem</button>
+      <button class="btn-sm" onclick="copyDetailKey('public')">📋 复制公钥</button>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <button class="btn-sm" onclick="closeModal('keyDetailModal')" style="margin:0;flex:1;text-align:center">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =========================================================================
+// 数据层 — 密钥列表 + 签发记录，均存储在 localStorage
+// =========================================================================
+const STORAGE_KEYS = 'ue5_license_keys';      // 密钥对列表
+const STORAGE_ACTIVE = 'ue5_license_active';  // 当前选中的密钥 ID
+const STORAGE_HISTORY = 'ue5_license_history';// 签发历史
+
+function loadKeys() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS)) || []; }
+  catch { return []; }
+}
+function saveKeys(keys) {
+  localStorage.setItem(STORAGE_KEYS, JSON.stringify(keys));
+}
+function loadActiveKeyId() {
+  return localStorage.getItem(STORAGE_ACTIVE) || '';
+}
+function saveActiveKeyId(id) {
+  localStorage.setItem(STORAGE_ACTIVE, id);
+}
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_HISTORY)) || []; }
+  catch { return []; }
+}
+function saveHistory(h) {
+  localStorage.setItem(STORAGE_HISTORY, JSON.stringify(h));
+}
+
+let activeKeyId = loadActiveKeyId();
+
+// =========================================================================
+// 初始化
+// =========================================================================
+(function init() {
+  renderKeySelector();
+  renderKeyList();
+  renderHistory();
+  updateKeyStatus();
+})();
+
+// =========================================================================
+// Tab 切换
+// =========================================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('show');
+}
+
+// =========================================================================
+// 密钥选择器（生成面板顶部的下拉框）
+// =========================================================================
+function renderKeySelector() {
+  const sel = document.getElementById('activeKeySelect');
+  const keys = loadKeys();
+  sel.innerHTML = '<option value="">-- 请选择密钥对 --</option>';
+  keys.forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k.id;
+    opt.textContent = `${k.name}  (${k.size}位, 已签${k.issueCount || 0}次)`;
+    if (k.id === activeKeyId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function onSelectActiveKey() {
+  activeKeyId = document.getElementById('activeKeySelect').value;
+  saveActiveKeyId(activeKeyId);
+  updateKeyStatus();
+}
+
+function getActiveKey() {
+  if (!activeKeyId) return null;
+  return loadKeys().find(k => k.id === activeKeyId) || null;
+}
+
+function updateKeyStatus() {
+  const el = document.getElementById('keyStatus');
+  const key = getActiveKey();
+  if (key) {
+    el.className = 'key-status ok';
+    el.innerHTML = `✅ 已选择密钥: <strong>${key.name}</strong> (${key.size}位)`;
+  } else {
+    el.className = 'key-status no';
+    el.innerHTML = '⚠️ 未选择密钥，请先到「密钥管理」创建或导入';
+  }
+}
+
+// =========================================================================
+// 密钥列表（密钥管理面板）
+// =========================================================================
+function renderKeyList() {
+  const container = document.getElementById('keyListContainer');
+  const keys = loadKeys();
+
+  if (keys.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔐</div>
+        <p>还没有密钥对</p>
+        <p style="font-size:.82em;margin-top:4px">点击右上角「+ 新建密钥对」开始</p>
+      </div>`;
+    return;
+  }
+
+  let html = '<div class="key-list">';
+  keys.forEach(k => {
+    const isActive = k.id === activeKeyId;
+    const created = new Date(k.createdAt).toLocaleDateString();
+    html += `
+      <div class="key-item${isActive ? ' active' : ''}" onclick="selectKey('${k.id}')">
+        <div class="key-icon">🔑</div>
+        <div class="key-info">
+          <div class="key-name">${escHtml(k.name)}</div>
+          <div class="key-meta">
+            <span class="badge badge-size">${k.size}位</span>
+            <span class="badge badge-count">已签发 ${k.issueCount || 0} 次</span>
+            <span>创建于 ${created}</span>
+          </div>
+        </div>
+        <div class="key-actions" onclick="event.stopPropagation()">
+          <button class="btn-sm" onclick="viewKeyDetail('${k.id}')" style="margin:0">查看</button>
+          <button class="btn-danger" onclick="deleteKey('${k.id}')" style="margin:0;padding:5px 10px">删除</button>
+        </div>
+      </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function selectKey(id) {
+  activeKeyId = id;
+  saveActiveKeyId(id);
+  renderKeySelector();
+  renderKeyList();
+  updateKeyStatus();
+}
+
+function deleteKey(id) {
+  const keys = loadKeys();
+  const key = keys.find(k => k.id === id);
+  if (!key) return;
+  if (!confirm(`确定删除密钥对「${key.name}」？\n\n删除后用该密钥签发的授权码将无法再生成，但已发给客户的仍可使用。\n建议先导出私钥备份！`)) return;
+
+  const newKeys = keys.filter(k => k.id !== id);
+  saveKeys(newKeys);
+  if (activeKeyId === id) {
+    activeKeyId = newKeys.length > 0 ? newKeys[0].id : '';
+    saveActiveKeyId(activeKeyId);
+  }
+  renderKeySelector();
+  renderKeyList();
+  updateKeyStatus();
+}
+
+// =========================================================================
+// 新建密钥对
+// =========================================================================
+function openNewKeyModal() {
+  document.getElementById('newKeyName').value = '';
+  document.getElementById('newKeySize').value = '2048';
+  document.getElementById('newKeyModal').classList.add('show');
+  document.getElementById('newKeyName').focus();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// 点击遮罩关闭
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('show');
+  });
+});
+
+function createNewKeyPair() {
+  const name = document.getElementById('newKeyName').value.trim();
+  const size = parseInt(document.getElementById('newKeySize').value);
+  if (!name) { alert('请输入项目名称'); return; }
+
+  closeModal('newKeyModal');
+
+  // 在密钥列表中显示"生成中"
+  const keys = loadKeys();
+  const tempId = 'temp_' + Date.now();
+  keys.unshift({
+    id: tempId, name: name + ' (生成中...)', size: size,
+    privateKey: '', publicKey: '', createdAt: Date.now(),
+    issueCount: 0
+  });
+  saveKeys(keys);
+  renderKeyList();
+
+  setTimeout(() => {
+    try {
+      const crypt = new JSEncrypt({ default_key_size: size });
+      crypt.getKey();
+
+      const newKey = {
+        id: 'key_' + Date.now() + '_' + Math.random().toString(36).substr(2,6),
+        name: name,
+        size: size,
+        privateKey: crypt.getPrivateKey(),
+        publicKey: crypt.getPublicKey(),
+        createdAt: Date.now(),
+        issueCount: 0
+      };
+
+      // 替换临时项
+      const keys = loadKeys().filter(k => k.id !== tempId);
+      keys.unshift(newKey);
+      saveKeys(keys);
+
+      activeKeyId = newKey.id;
+      saveActiveKeyId(activeKeyId);
+
+      renderKeySelector();
+      renderKeyList();
+      updateKeyStatus();
+
+      // 自动打开详情，方便用户导出
+      viewKeyDetail(newKey.id);
+    } catch (e) {
+      // 移除临时项
+      const keys = loadKeys().filter(k => k.id !== tempId);
+      saveKeys(keys);
+      renderKeyList();
+      alert('密钥生成失败: ' + e.message);
+    }
+  }, 50);
+}
+
+// =========================================================================
+// 查看密钥详情
+// =========================================================================
+let viewingKey = null;
+
+function viewKeyDetail(id) {
+  const key = loadKeys().find(k => k.id === id);
+  if (!key) return;
+
+  viewingKey = key;
+  document.getElementById('detailTitle').textContent = `密钥详情 — ${key.name}`;
+  document.getElementById('detailPrivateKey').value = key.privateKey;
+  document.getElementById('detailPublicKey').value = key.publicKey;
+  document.getElementById('keyDetailModal').classList.add('show');
+}
+
+function exportDetailKey(type) {
+  if (!viewingKey) return;
+  const content = type === 'private' ? viewingKey.privateKey : viewingKey.publicKey;
+  const filename = type === 'private'
+    ? `${viewingKey.name}_private_key.pem`
+    : `${viewingKey.name}_public_key.pem`;
+  downloadFile(filename, content);
+}
+
+function copyDetailKey(type) {
+  if (!viewingKey) return;
+  const content = type === 'private' ? viewingKey.privateKey : viewingKey.publicKey;
+  copyToClipboard(content, '密钥已复制到剪贴板');
+}
+
+// =========================================================================
+// 导入已有私钥
+// =========================================================================
+function importExistingKey() {
+  const name = prompt('请为此密钥对命名：');
+  if (!name) return;
+
+  const privateKeyText = prompt('请粘贴完整的私钥内容（-----BEGIN RSA PRIVATE KEY----- ... -----END RSA PRIVATE KEY-----）：');
+  if (!privateKeyText) return;
+
+  try {
+    const crypt = new JSEncrypt();
+    crypt.setPrivateKey(privateKeyText.trim());
+
+    const pubKey = crypt.getPublicKey();
+    if (!pubKey) throw new Error('无法提取公钥');
+
+    // 从私钥中推算密钥长度（粗略）
+    const keySize = privateKeyText.length > 1600 ? 4096 : privateKeyText.length > 800 ? 2048 : 1024;
+
+    const newKey = {
+      id: 'key_' + Date.now() + '_' + Math.random().toString(36).substr(2,6),
+      name: name,
+      size: keySize,
+      privateKey: crypt.getPrivateKey(),
+      publicKey: pubKey,
+      createdAt: Date.now(),
+      issueCount: 0
+    };
+
+    const keys = loadKeys();
+    keys.unshift(newKey);
+    saveKeys(keys);
+    activeKeyId = newKey.id;
+    saveActiveKeyId(activeKeyId);
+
+    renderKeySelector();
+    renderKeyList();
+    updateKeyStatus();
+    alert('导入成功！');
+  } catch (e) {
+    alert('导入失败: ' + e.message);
+  }
+}
+
+// =========================================================================
+// RSA 私钥签名（PKCS#1 v1.5 格式，与 C++ RSA_public_decrypt 兼容）
+//
+// 原理：JSEncrypt.encrypt() 做的是"公钥加密"(m^e mod n)，C++ 端用公钥无法解密。
+// 正确做法：手动构造 PKCS#1 v1.5 签名块（0x00 0x01 0xFF...0xFF 0x00 <data>），
+// 然后用私钥做 RSA 运算(m^d mod n)，C++ 端用 RSA_public_decrypt(RSA_PKCS1_PADDING) 验签还原。
+// =========================================================================
+function rsaSignRaw(jsEncryptInstance, message) {
+  var key = jsEncryptInstance.getKey();
+  if (!key) return null;
+
+  var keyByteLen = Math.ceil(key.n.bitLength() / 8); // 密钥字节数（2048位 = 256字节）
+
+  // 消息转字节
+  var msgBytes = [];
+  for (var i = 0; i < message.length; i++) {
+    var c = message.charCodeAt(i);
+    if (c > 255) c = 0x3F; // 非 ASCII 字符替换为 '?'
+    msgBytes.push(c);
+  }
+
+  // 构造 PKCS#1 v1.5 签名填充: 0x00 0x01 [0xFF 填充] 0x00 [消息字节]
+  // 总长度必须等于 keyByteLen
+  var paddingLen = keyByteLen - 3 - msgBytes.length; // 3 = 0x00 + 0x01 + 0x00
+  if (paddingLen < 8) return null; // PKCS#1 要求至少 8 字节填充
+
+  var paddedBytes = [0x00, 0x01];
+  for (var j = 0; j < paddingLen; j++) paddedBytes.push(0xFF);
+  paddedBytes.push(0x00);
+  paddedBytes = paddedBytes.concat(msgBytes);
+
+  // 字节数组 → BigInteger
+  var hexStr = '';
+  for (var k = 0; k < paddedBytes.length; k++) {
+    hexStr += ('0' + paddedBytes[k].toString(16)).slice(-2);
+  }
+  var BigInteger = key.n.constructor; // 获取 BigInteger 类
+  var m = new BigInteger(hexStr, 16);
+
+  // 私钥运算: signature = m^d mod n
+  var sig = m.modPow(key.d, key.n);
+
+  // 转 hex，补齐前导零
+  var sigHex = sig.toString(16);
+  while (sigHex.length < keyByteLen * 2) sigHex = '0' + sigHex;
+
+  // hex → Base64
+  var bytes = [];
+  for (var b = 0; b < sigHex.length; b += 2) {
+    bytes.push(parseInt(sigHex.substr(b, 2), 16));
+  }
+  var binary = String.fromCharCode.apply(null, bytes);
+  return btoa(binary);
+}
+
+// =========================================================================
+// 授权码生成
+// =========================================================================
+function generateLicense() {
+  const key = getActiveKey();
+  if (!key) {
+    showResult('error', '❌ 未选择密钥', '请先在上方选择一个密钥对');
+    return;
+  }
+
+  const machineCode = document.getElementById('machineCode').value.trim().toUpperCase();
+  const validDays = parseInt(document.getElementById('validDays').value) || 365;
+  const maxUsage = parseInt(document.getElementById('maxUsage').value);
+
+  if (!machineCode) {
+    showResult('error', '❌ 机器码不能为空', '请输入客户发来的机器码');
+    return;
+  }
+
+  try {
+    // 1. 构建 JSON 载荷
+    const expiryTimestamp = Math.floor(Date.now() / 1000) + (validDays * 24 * 3600);
+    const payload = {
+      MachineCode: machineCode,
+      ExpiryDate: expiryTimestamp,
+      MaxUsage: isNaN(maxUsage) ? -1 : maxUsage
+    };
+    const jsonStr = JSON.stringify(payload);
+
+    // 2. RSA 私钥签名（PKCS#1 v1.5 格式 → C++ 端 RSA_public_decrypt 验签还原）
+    const signer = new JSEncrypt();
+    signer.setPrivateKey(key.privateKey);
+    const encrypted = rsaSignRaw(signer, jsonStr);
+
+    if (!encrypted) {
+      throw new Error('RSA 签名失败，可能是数据长度超过密钥容量（2048位密钥最多签名245字节）');
+    }
+
+    const licenseCode = encrypted;
+
+    // 3. 格式化到期日期
+    const expiryDate = new Date(expiryTimestamp * 1000);
+    const expiryStr = expiryDate.toISOString().replace('T', ' ').replace('.000Z', ' UTC');
+
+    // 4. 更新签发计数
+    const keys = loadKeys();
+    const ki = keys.find(k => k.id === key.id);
+    if (ki) {
+      ki.issueCount = (ki.issueCount || 0) + 1;
+      saveKeys(keys);
+    }
+
+    // 5. 保存签发记录
+    const history = loadHistory();
+    history.unshift({
+      id: 'h_' + Date.now(),
+      keyName: key.name,
+      machineCode: machineCode,
+      validDays: validDays,
+      expiryStr: expiryStr,
+      createdAt: Date.now()
+    });
+    // 只保留最近 200 条
+    if (history.length > 200) history.length = 200;
+    saveHistory(history);
+
+    showResult('success', '✅ 授权码生成成功', licenseCode,
+      `<dt>密钥对</dt><dd>${escHtml(key.name)}</dd>
+       <dt>机器码</dt><dd>${escHtml(machineCode)}</dd>
+       <dt>到期日期</dt><dd>${expiryStr}</dd>
+       <dt>剩余天数</dt><dd>${validDays} 天</dd>
+       <dt>最大次数</dt><dd>${payload.MaxUsage === -1 ? '不限' : payload.MaxUsage}</dd>`
+    );
+
+    // 刷新列表显示
+    renderKeySelector();
+    renderKeyList();
+    renderHistory();
+  } catch (e) {
+    showResult('error', '❌ 生成失败', e.message);
+  }
+}
+
+function showResult(type, title, content, infoHtml) {
+  const box = document.getElementById('resultBox');
+  box.className = 'result show ' + (type === 'success' ? 'success' : 'error');
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('licenseCode').textContent = content || '';
+  document.getElementById('infoGrid').innerHTML = infoHtml || '';
+}
+
+function copyLicense() {
+  const text = document.getElementById('licenseCode').textContent;
+  if (!text) return;
+  copyToClipboard(text);
+  const btn = event.target;
+  btn.textContent = '✅ 已复制!';
+  setTimeout(() => btn.textContent = '📋 复制到剪贴板', 2000);
+}
+
+// =========================================================================
+// 签发记录
+// =========================================================================
+function renderHistory() {
+  const container = document.getElementById('historyContainer');
+  const history = loadHistory();
+
+  if (history.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>暂无签发记录</p></div>';
+    return;
+  }
+
+  let html = '';
+  history.forEach(h => {
+    const date = new Date(h.createdAt).toLocaleString();
+    html += `
+      <div class="history-item">
+        <span class="h-project">[${escHtml(h.keyName)}]</span>
+        <span class="h-machine"> → ${escHtml(h.machineCode)}</span>
+        <div class="h-date">${h.validDays}天 · ${date}</div>
+      </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function clearHistory() {
+  if (!confirm('确定清空所有签发记录？此操作不可恢复。')) return;
+  saveHistory([]);
+  renderHistory();
+}
+
+// =========================================================================
+// 工具函数
+// =========================================================================
+function downloadFile(filename, content) {
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyToClipboard(text, msg) {
+  navigator.clipboard.writeText(text).then(() => {
+    if (msg) alert(msg);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (msg) alert(msg);
+  });
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>

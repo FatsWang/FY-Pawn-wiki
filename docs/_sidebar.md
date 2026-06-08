@@ -9,3 +9,4 @@
 
 - **🎮 UE 数字孪生插件**
   - [📦 [Fy-Pawn] 使用手册](ue-plugins/FyPawn/README.md)
+  - [📦 [MachineAuth] 使用手册](ue-plugins/MachineAuth/README.md)
