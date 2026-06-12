@@ -4,14 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WPPMachineAuth 授权码生成器</title>
-<script>
-// Electron 环境检测：桌面版无需额外处理，HTML 完全复用
-if (typeof process !== 'undefined' && process.versions && process.versions.electron) {
-  document.addEventListener('DOMContentLoaded', () => {
-    document.title = 'WPPMachineAuth 授权码生成器 (本地版)';
-  });
-}
-</script>
 <script src="./jsencrypt.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -49,6 +41,7 @@ input:focus,textarea:focus,select:focus{border-color:var(--accent)}
 select{appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select:disabled{opacity: 0.7; cursor: not-allowed;}
 select option{background:#1a1f35;color:var(--text);padding:8px}
 select option:hover{background:rgba(0,212,170,.15)}
 textarea{min-height:80px;font-family:'Consolas','Courier New',monospace;font-size:.82em;line-height:1.5}
@@ -124,6 +117,10 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 .history-item .h-machine{color:var(--text);font-family:monospace;font-size:.9em}
 .history-item .h-date{color:var(--muted);font-size:.85em;margin-top:2px}
 
+/* ===== 关于作者按钮特效 ===== */
+.author-link {display:flex; align-items:center; gap:10px; padding:12px 18px; border-radius:10px; background:rgba(255,255,255,.05); text-decoration:none; color:var(--text); transition:all .3s;}
+.author-link:hover {background:rgba(0,212,170,.1); transform:translateX(5px); color:var(--accent);}
+
 /* ===== Modal ===== */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;
   align-items:center;justify-content:center;padding:16px}
@@ -144,20 +141,19 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 </head>
 <body>
 
-<h1>WPPMachineAuth UE5 授权码生成器</h1>
+<h1>WPPMachineAuth 授权码生成器</h1>
 <p class="subtitle"> RSA 加密 · 多项目密钥管理 </p>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('generate')">生成授权码</button>
-  <button class="tab" onclick="switchTab('keys')">密钥管理</button>
-  <button class="tab" onclick="switchTab('history')">签发记录</button>
-  <button class="tab" onclick="switchTab('help')">使用说明</button>
+  <button class="tab active" onclick="switchTab(this, 'generate')">生成授权码</button>
+  <button class="tab" onclick="switchTab(this, 'keys')">密钥管理</button>
+  <button class="tab" onclick="switchTab(this, 'history')">签发记录</button>
+  <button class="tab" onclick="switchTab(this, 'help')">使用说明</button>
+  <button class="tab" onclick="switchTab(this, 'about')">关于作者</button>
 </div>
 
-<!-- ==================== 生成授权码面板 ==================== -->
 <div class="panel show" id="panel-generate">
   <div class="card">
-    <!-- 密钥选择器 -->
     <label style="margin-top:0">当前使用的密钥对</label>
     <div class="key-selector" id="keySelector">
       <div class="key-info">
@@ -189,13 +185,12 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
     <div class="result" id="resultBox">
       <h3 id="resultTitle"></h3>
       <div class="license-output" id="licenseCode"></div>
-      <button class="btn-sm" onclick="copyLicense()">📋 复制到剪贴板</button>
+      <button class="btn-sm" onclick="copyLicense(this)">📋 复制到剪贴板</button>
       <dl class="info-grid" id="infoGrid"></dl>
     </div>
   </div>
 </div>
 
-<!-- ==================== 密钥管理面板 ==================== -->
 <div class="panel" id="panel-keys">
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
@@ -214,7 +209,6 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   </div>
 </div>
 
-<!-- ==================== 签发记录面板 ==================== -->
 <div class="panel" id="panel-history">
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
@@ -225,7 +219,6 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   </div>
 </div>
 
-<!-- ==================== 使用说明面板 ==================== -->
 <div class="panel" id="panel-help">
   <div class="card">
     <h3 style="margin-bottom:14px;font-size:1.05em">完整使用流程</h3>
@@ -233,7 +226,7 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
       <p><strong style="color:var(--accent)">第一步：创建密钥对</strong></p>
       <ol style="margin-left:20px;margin-bottom:16px">
         <li>切换到「密钥管理」标签页</li>
-        <li>点击「+ 新建密钥对」，输入项目名称和密钥长度</li>
+        <li>点击「+ 新建密钥对」，输入项目名称</li>
         <li>生成后导出私钥 .pem 文件备份到安全位置</li>
         <li>复制公钥，粘贴到 UE5 代码的 GetPublicKey() 中</li>
       </ol>
@@ -241,7 +234,7 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
       <p><strong style="color:var(--accent)">第二步：签发授权码</strong></p>
       <ol style="margin-left:20px;margin-bottom:16px">
         <li>在「生成授权码」页面选择密钥对</li>
-        <li>输入客户机器码和授权天数</li>
+        <li>输入客户机器码 and 授权天数</li>
         <li>点击生成，复制授权码发给客户</li>
       </ol>
 
@@ -265,7 +258,36 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   </div>
 </div>
 
-<!-- ==================== 新建密钥对 Modal ==================== -->
+<div class="panel" id="panel-about">
+  <div class="card" style="display:flex; flex-direction:column; align-items:center;">
+    <img src="https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/icon.png" 
+         onerror="this.onerror=null; this.src='./icon.png';" 
+         alt="作者头像" 
+         style="width:110px; height:110px; border-radius:50%; margin-bottom:16px; border:3px solid var(--accent); object-fit: cover; box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);">
+    
+    <h2 style="font-size:1.4em; margin-bottom:8px;">常胜将军王胖胖</h2>
+    
+    <div style="background:rgba(0,212,170,.1); border:1px solid rgba(0,212,170,.3); color:var(--accent); padding:10px 24px; border-radius:20px; font-weight:bold; margin-bottom:24px;">
+      售后 +V: 17610986288
+    </div>
+
+    <div style="width:100%; max-width:400px; display:flex; flex-direction:column; gap:10px;">
+      <a href="https://space.bilibili.com/354782208#/" target="_blank" class="author-link">
+        <span style="font-size:1.2em;">📺</span> 常胜将军王胖胖 · B站主页
+      </a>
+      <a href="https://www.fab.com/listings/c498f463-107e-47d9-88b5-a4a2bce3c3d6" target="_blank" class="author-link">
+        <span style="font-size:1.2em;">🛒</span> FAB 商城插件主页
+      </a>
+      <a href="https://www.zhihu.com/people/csjjwpp" target="_blank" class="author-link">
+        <span style="font-size:1.2em;">📝</span> 知乎主页
+      </a>
+      <a href="https://www.fywpp.top/#/ue-plugins/MachineAuth/README" target="_blank" class="author-link">
+        <span style="font-size:1.2em;">🌐</span> 在线授权文档与工具网站
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="newKeyModal">
   <div class="modal">
     <h3>新建密钥对</h3>
@@ -275,16 +297,14 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
     <div class="row">
       <div>
         <label>密钥长度</label>
-        <select id="newKeySize">
-          <option value="1024">1024 位</option>
-          <option value="2048" selected>2048 位 </option>
-          <option value="4096">4096 位</option>
+        <select id="newKeySize" disabled>
+          <option value="2048" selected>2048 位 (推荐最佳标准)</option>
         </select>
       </div>
     </div>
 
     <div style="margin-top:12px;padding:12px;border-radius:8px;background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.2);font-size:.82em;color:var(--warn)">
-      💡 2048 位是安全与速度的最佳平衡。1024 较为简单，4096 位生成较慢且授权码更长。
+      💡 为了确保最佳的安全与加密性能，当前版本统一锁定为标准强度的 2048 位安全密钥。
     </div>
 
     <div style="display:flex;gap:10px;margin-top:20px">
@@ -294,7 +314,6 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   </div>
 </div>
 
-<!-- ==================== 查看密钥详情 Modal ==================== -->
 <div class="modal-overlay" id="keyDetailModal">
   <div class="modal" style="max-width:580px">
     <h3 id="detailTitle">密钥详情</h3>
@@ -361,12 +380,12 @@ let activeKeyId = loadActiveKeyId();
 })();
 
 // =========================================================================
-// Tab 切换
+// Tab 切换（安全重构版：完美支持独立运行及各种内嵌浏览器环境）
 // =========================================================================
-function switchTab(name) {
+function switchTab(element, name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-  event.target.classList.add('active');
+  element.classList.add('active');
   document.getElementById('panel-' + name).classList.add('show');
 }
 
@@ -431,7 +450,7 @@ function renderKeyList() {
     const isActive = k.id === activeKeyId;
     const created = new Date(k.createdAt).toLocaleDateString();
     html += `
-      <div class="key-item${isActive ? ' active' : ''}" onclick="selectKey('${k.id}')">
+      <div class="key-item${isActive ? ' active' : ''}" onclick="selectKey(this, '${k.id}')">
         <div class="key-icon">🔑</div>
         <div class="key-info">
           <div class="key-name">${escHtml(k.name)}</div>
@@ -451,7 +470,7 @@ function renderKeyList() {
   container.innerHTML = html;
 }
 
-function selectKey(id) {
+function selectKey(element, id) {
   activeKeyId = id;
   saveActiveKeyId(id);
   renderKeySelector();
@@ -481,7 +500,6 @@ function deleteKey(id) {
 // =========================================================================
 function openNewKeyModal() {
   document.getElementById('newKeyName').value = '';
-  document.getElementById('newKeySize').value = '2048';
   document.getElementById('newKeyModal').classList.add('show');
   document.getElementById('newKeyName').focus();
 }
@@ -490,7 +508,6 @@ function closeModal(id) {
   document.getElementById(id).classList.remove('show');
 }
 
-// 点击遮罩关闭
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', e => {
     if (e.target === overlay) overlay.classList.remove('show');
@@ -499,12 +516,11 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
 
 function createNewKeyPair() {
   const name = document.getElementById('newKeyName').value.trim();
-  const size = parseInt(document.getElementById('newKeySize').value);
+  const size = 2048; 
   if (!name) { alert('请输入项目名称'); return; }
 
   closeModal('newKeyModal');
 
-  // 在密钥列表中显示"生成中"
   const keys = loadKeys();
   const tempId = 'temp_' + Date.now();
   keys.unshift({
@@ -530,7 +546,6 @@ function createNewKeyPair() {
         issueCount: 0
       };
 
-      // 替换临时项
       const keys = loadKeys().filter(k => k.id !== tempId);
       keys.unshift(newKey);
       saveKeys(keys);
@@ -542,10 +557,8 @@ function createNewKeyPair() {
       renderKeyList();
       updateKeyStatus();
 
-      // 自动打开详情，方便用户导出
       viewKeyDetail(newKey.id);
     } catch (e) {
-      // 移除临时项
       const keys = loadKeys().filter(k => k.id !== tempId);
       saveKeys(keys);
       renderKeyList();
@@ -602,8 +615,7 @@ function importExistingKey() {
     const pubKey = crypt.getPublicKey();
     if (!pubKey) throw new Error('无法提取公钥');
 
-    // 从私钥中推算密钥长度（粗略）
-    const keySize = privateKeyText.length > 1600 ? 4096 : privateKeyText.length > 800 ? 2048 : 1024;
+    const keySize = 2048;
 
     const newKey = {
       id: 'key_' + Date.now() + '_' + Math.random().toString(36).substr(2,6),
@@ -631,52 +643,41 @@ function importExistingKey() {
 }
 
 // =========================================================================
-// RSA 私钥签名（PKCS#1 v1.5 格式，与 C++ RSA_public_decrypt 兼容）
-//
-// 原理：JSEncrypt.encrypt() 做的是"公钥加密"(m^e mod n)，C++ 端用公钥无法解密。
-// 正确做法：手动构造 PKCS#1 v1.5 签名块（0x00 0x01 0xFF...0xFF 0x00 <data>），
-// 然后用私钥做 RSA 运算(m^d mod n)，C++ 端用 RSA_public_decrypt(RSA_PKCS1_PADDING) 验签还原。
+// RSA 私钥签名算法
 // =========================================================================
 function rsaSignRaw(jsEncryptInstance, message) {
   var key = jsEncryptInstance.getKey();
   if (!key) return null;
 
-  var keyByteLen = Math.ceil(key.n.bitLength() / 8); // 密钥字节数（2048位 = 256字节）
+  var keyByteLen = Math.ceil(key.n.bitLength() / 8); 
 
-  // 消息转字节
   var msgBytes = [];
   for (var i = 0; i < message.length; i++) {
     var c = message.charCodeAt(i);
-    if (c > 255) c = 0x3F; // 非 ASCII 字符替换为 '?'
+    if (c > 255) c = 0x3F; 
     msgBytes.push(c);
   }
 
-  // 构造 PKCS#1 v1.5 签名填充: 0x00 0x01 [0xFF 填充] 0x00 [消息字节]
-  // 总长度必须等于 keyByteLen
-  var paddingLen = keyByteLen - 3 - msgBytes.length; // 3 = 0x00 + 0x01 + 0x00
-  if (paddingLen < 8) return null; // PKCS#1 要求至少 8 字节填充
+  var paddingLen = keyByteLen - 3 - msgBytes.length; 
+  if (paddingLen < 8) return null; 
 
   var paddedBytes = [0x00, 0x01];
   for (var j = 0; j < paddingLen; j++) paddedBytes.push(0xFF);
   paddedBytes.push(0x00);
   paddedBytes = paddedBytes.concat(msgBytes);
 
-  // 字节数组 → BigInteger
   var hexStr = '';
   for (var k = 0; k < paddedBytes.length; k++) {
     hexStr += ('0' + paddedBytes[k].toString(16)).slice(-2);
   }
-  var BigInteger = key.n.constructor; // 获取 BigInteger 类
+  var BigInteger = key.n.constructor; 
   var m = new BigInteger(hexStr, 16);
 
-  // 私钥运算: signature = m^d mod n
   var sig = m.modPow(key.d, key.n);
 
-  // 转 hex，补齐前导零
   var sigHex = sig.toString(16);
   while (sigHex.length < keyByteLen * 2) sigHex = '0' + sigHex;
 
-  // hex → Base64
   var bytes = [];
   for (var b = 0; b < sigHex.length; b += 2) {
     bytes.push(parseInt(sigHex.substr(b, 2), 16));
@@ -705,7 +706,6 @@ function generateLicense() {
   }
 
   try {
-    // 1. 构建 JSON 载荷
     const expiryTimestamp = Math.floor(Date.now() / 1000) + (validDays * 24 * 3600);
     const payload = {
       MachineCode: machineCode,
@@ -714,22 +714,19 @@ function generateLicense() {
     };
     const jsonStr = JSON.stringify(payload);
 
-    // 2. RSA 私钥签名（PKCS#1 v1.5 格式 → C++ 端 RSA_public_decrypt 验签还原）
     const signer = new JSEncrypt();
     signer.setPrivateKey(key.privateKey);
     const encrypted = rsaSignRaw(signer, jsonStr);
 
     if (!encrypted) {
-      throw new Error('RSA 签名失败，可能是数据长度超过密钥容量（2048位密钥最多签名245字节）');
+      throw new Error('RSA 签名失败，可能是数据长度超过密钥容量');
     }
 
     const licenseCode = encrypted;
 
-    // 3. 格式化到期日期
     const expiryDate = new Date(expiryTimestamp * 1000);
     const expiryStr = expiryDate.toISOString().replace('T', ' ').replace('.000Z', ' UTC');
 
-    // 4. 更新签发计数
     const keys = loadKeys();
     const ki = keys.find(k => k.id === key.id);
     if (ki) {
@@ -737,7 +734,6 @@ function generateLicense() {
       saveKeys(keys);
     }
 
-    // 5. 保存签发记录
     const history = loadHistory();
     history.unshift({
       id: 'h_' + Date.now(),
@@ -747,7 +743,6 @@ function generateLicense() {
       expiryStr: expiryStr,
       createdAt: Date.now()
     });
-    // 只保留最近 200 条
     if (history.length > 200) history.length = 200;
     saveHistory(history);
 
@@ -759,7 +754,6 @@ function generateLicense() {
        <dt>最大次数</dt><dd>${payload.MaxUsage === -1 ? '不限' : payload.MaxUsage}</dd>`
     );
 
-    // 刷新列表显示
     renderKeySelector();
     renderKeyList();
     renderHistory();
@@ -776,13 +770,13 @@ function showResult(type, title, content, infoHtml) {
   document.getElementById('infoGrid').innerHTML = infoHtml || '';
 }
 
-function copyLicense() {
+// 【安全修改】：重构版复制机制，杜绝全局作用域冲突
+function copyLicense(buttonElement) {
   const text = document.getElementById('licenseCode').textContent;
   if (!text) return;
   copyToClipboard(text);
-  const btn = event.target;
-  btn.textContent = '✅ 已复制!';
-  setTimeout(() => btn.textContent = '📋 复制到剪贴板', 2000);
+  buttonElement.textContent = '✅ 已复制!';
+  setTimeout(() => buttonElement.textContent = '📋 复制到剪贴板', 2000);
 }
 
 // =========================================================================
