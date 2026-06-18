@@ -4,27 +4,11 @@
 
 WPPMachineAuth 授权码生成器是给插件开发者使用的发卡端工具。你用它创建 RSA 密钥对、保存私钥、导出公钥，并根据客户机器码签发授权码。UE 项目里只放公钥，客户应用只负责验证授权码，不能反向伪造授权码。
 
-## 目录
 
-1. [工作原理](#1-工作原理)
-2. [快速开始](#2-快速开始)
-3. [密钥管理](#3-密钥管理)
-4. [签发授权码](#4-签发授权码)
-5. [UE Widget 接入](#5-ue-widget-接入)
-6. [蓝图接口参考](#6-蓝图接口参考)
-7. [安全与公开发布建议](#7-安全与公开发布建议)
-8. [常见问题](#8-常见问题)
-9. [技术支持](#9-技术支持)
 
 ## 1. 工作原理
 
 WPPMachineAuth 使用 RSA-2048 非对称加密完成授权验证：
-
-```text
-开发者发卡端                         客户 UE 应用
-持有私钥 + 公钥                      只持有公钥
-用私钥签发授权码                     用公钥验证授权码
-```
 
 - 私钥必须只由开发者保管。谁拿到私钥，谁就能签发授权码。
 - 公钥可以放进 UE 项目。公钥只能验证授权码，不能生成授权码。
@@ -36,11 +20,7 @@ WPPMachineAuth 使用 RSA-2048 非对称加密完成授权验证：
 
 ### 2.1 打开工具
 
-双击打开：
 
-```text
-Tools/LicenseGenerator/license_tool.html
-```
 
 页面包含 4 个区域：
 
@@ -73,6 +53,7 @@ Tools/LicenseGenerator/license_tool.html
 
 ```text
 -----BEGIN PUBLIC KEY-----
+...
 ...
 -----END PUBLIC KEY-----
 ```
@@ -110,7 +91,7 @@ Tools/LicenseGenerator/license_tool.html
 
 删除只会移除当前浏览器 `localStorage` 中保存的密钥记录，不会让已经发给客户的授权码失效。
 
-删除前请确认你已经离线备份私钥。私钥丢失后无法恢复，只能生成新密钥对并更新 UE 项目的 `RSAPublicKey`。
+> 删除前请确认你已经离线备份私钥。私钥丢失后无法恢复，只能生成新密钥对并更新 UE 项目的 `RSAPublicKey`。
 
 ## 4. 签发授权码
 
@@ -141,6 +122,7 @@ Tools/LicenseGenerator/license_tool.html
 2. 父类选择 `WPPMachineAuthWidget`。
 3. 建议命名为 `WBP_MachineAuth`。
 4. 在 Class Defaults 中填写 `RSAPublicKey`，或在创建 Widget 时传入。
+  ![](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/16e026bdade4c0777788ef364c1f8a88.png)
 
 ### 必要 UMG 控件名
 
@@ -155,6 +137,7 @@ Tools/LicenseGenerator/license_tool.html
 | `TextBlock` | `StatusText` | 显示验证状态 |
 
 这些控件都是可选绑定。缺少某个控件时，对应 UI 行为不会执行，但 Widget 仍可构造。
+![](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260618172955141.png)
 
 ### 创建时传入公钥
 
