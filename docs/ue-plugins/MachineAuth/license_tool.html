@@ -107,6 +107,34 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 .empty-state{text-align:center;padding:30px 20px;color:var(--muted);font-size:.9em;line-height:1.6}
 .empty-state .icon{font-size:2.4em;margin-bottom:8px}
 
+
+/* ===== 本地 JSON 密钥库 ===== */
+.app-shell{width:100%;display:flex;flex-direction:column;align-items:center}
+.app-shell.hidden{display:none}
+.setup-shell{width:100%;max-width:980px;display:none;grid-template-columns:1.05fr .95fr;gap:18px;align-items:stretch}
+.setup-shell.show{display:grid}
+.setup-panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;backdrop-filter:blur(16px)}
+.setup-kicker{font-size:.78em;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.setup-title{font-size:1.45em;line-height:1.25;margin-bottom:12px;color:var(--text)}
+.setup-copy{font-size:.9em;line-height:1.75;color:rgba(255,255,255,.72)}
+.setup-warning{margin-top:18px;padding:14px;border-radius:10px;background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.22);color:var(--warn);font-size:.84em;line-height:1.6}
+.setup-actions{display:grid;gap:10px;margin-top:12px}
+.setup-action{width:100%;text-align:left;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);border-radius:10px;padding:14px 16px}
+.setup-action:hover{border-color:rgba(0,212,170,.45);background:rgba(0,212,170,.08);transform:translateY(-1px)}
+.setup-action strong{display:block;color:var(--text);font-size:.95em;margin-bottom:3px}
+.setup-action span{display:block;color:var(--muted);font-size:.78em;font-weight:400;line-height:1.45}
+.setup-action.primary{background:linear-gradient(135deg,rgba(0,212,170,.22),rgba(0,180,216,.18));border-color:rgba(0,212,170,.38)}
+.setup-message{margin-top:14px;display:none;padding:12px 14px;border-radius:10px;font-size:.84em;line-height:1.55}
+.setup-message.show{display:block}
+.setup-message.error{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.25);color:var(--danger)}
+.setup-message.info{background:rgba(0,180,216,.08);border:1px solid rgba(0,180,216,.18);color:var(--accent2)}
+.keystore-bar{width:100%;max-width:620px;margin:-8px 0 18px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.035);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.keystore-meta{font-size:.8em;color:var(--muted);line-height:1.55}
+.keystore-meta strong{color:var(--accent);font-weight:700}
+.keystore-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-ghost{padding:7px 12px;font-size:.78em;background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--border);border-radius:8px}
+.btn-ghost:hover{background:rgba(255,255,255,.15)}
+@media(max-width:760px){.setup-shell{grid-template-columns:1fr}.setup-panel{padding:22px}.keystore-bar{align-items:flex-start}}
 /* ===== 生成面板的密钥选择器 ===== */
 .key-selector{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;
   border:1px solid var(--border);background:rgba(255,255,255,.03);margin-bottom:6px}
@@ -133,13 +161,311 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   .tabs{gap:2px;padding:3px}
   .tab{padding:8px 14px;font-size:.82em}
 }
+
+/* ===== Vault refresh ===== */
+.vault-ribbon{width:100%;max-width:760px;margin:-4px 0 18px;padding:14px 16px 14px 18px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(135deg,rgba(12,18,30,.94),rgba(22,31,49,.78));display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;box-shadow:0 18px 50px rgba(0,0,0,.28);position:relative;overflow:hidden}
+.vault-ribbon:before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:linear-gradient(to bottom,var(--accent),var(--accent2),var(--warn))}
+.vault-ribbon:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.06),transparent 34%);pointer-events:none}
+.vault-meta{position:relative;z-index:1;display:grid;gap:6px;min-width:0;flex:1}.vault-title{display:flex;align-items:center;gap:8px;font-size:.76em;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.vault-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--accent)}.vault-file{font-size:.98em;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vault-stats{display:flex;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:.78em}.vault-stats strong{color:var(--accent);font-weight:700}.vault-actions{position:relative;z-index:1;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.vault-actions .btn-ghost{background:rgba(255,255,255,.06);color:var(--muted)}.vault-actions .btn-ghost:hover{background:rgba(255,255,255,.13);color:var(--text)}
+.section-toolbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.section-title h3{font-size:1.12em;margin-bottom:4px}.section-subtitle{color:var(--muted);font-size:.82em;line-height:1.45}.section-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.action-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#061019;box-shadow:0 12px 28px rgba(0,212,170,.16)}.action-primary:hover{transform:translateY(-1px);opacity:.94}.action-secondary{padding:8px 14px;font-size:.82em;background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--border);border-radius:8px}.action-secondary:hover{background:rgba(255,255,255,.14)}
+.key-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:13px;padding:14px 16px;border-radius:12px;border:1px solid var(--border);background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.025));cursor:pointer;transition:all .25s}.key-card:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.06);transform:translateY(-1px)}.key-card-active{border-color:var(--accent);box-shadow:inset 0 0 0 1px rgba(0,212,170,.3),0 12px 30px rgba(0,212,170,.08);background:linear-gradient(135deg,rgba(0,212,170,.1),rgba(0,180,216,.055))}.key-mark{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.2);font-size:.72em;font-weight:700;color:var(--accent2)}.badge-active{background:rgba(0,212,170,.14);color:var(--accent)}
+@media(max-width:560px){.key-card{grid-template-columns:auto 1fr}.key-actions{grid-column:1/-1;justify-content:flex-end;margin-top:6px}.section-toolbar{flex-direction:column}.section-actions{justify-content:flex-start}}
+
+
+/* ===== Compact vault bar and refined selector ===== */
+.vault-ribbon{
+  max-width:760px;
+  min-height:46px;
+  margin:-6px 0 16px;
+  padding:7px 10px 7px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,.028);
+  border:1px solid rgba(255,255,255,.075);
+  box-shadow:none;
+  gap:10px;
+  flex-wrap:nowrap;
+  overflow:visible;
+}
+.vault-ribbon:before{display:none}
+.vault-ribbon:after{display:none}
+.vault-meta{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+  color:var(--muted);
+  font-size:.76em;
+  line-height:1.25;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.vault-meta:before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  flex:0 0 auto;
+  background:var(--accent);
+  box-shadow:0 0 10px rgba(0,212,170,.5);
+}
+.vault-title,.vault-dot,.vault-file,.vault-stats{display:contents}
+.vault-file{font-size:inherit;font-weight:600;color:rgba(255,255,255,.82)}
+.vault-stats{font-size:inherit;color:inherit}
+.vault-stats strong{color:rgba(255,255,255,.86);font-weight:600}
+.vault-actions{gap:6px;flex:0 0 auto}
+.vault-actions .btn-ghost{
+  padding:5px 9px;
+  min-height:28px;
+  border-radius:7px;
+  font-size:.72em;
+  font-weight:600;
+  color:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.045);
+  border-color:rgba(255,255,255,.08);
+}
+.vault-actions .btn-ghost:hover{color:var(--text);background:rgba(255,255,255,.085)}
+.key-selector{
+  padding:0;
+  border:none;
+  background:transparent;
+  margin-bottom:8px;
+}
+.key-selector .key-info{position:relative;width:100%}
+.key-selector .key-info:after{
+  content:"";
+  position:absolute;
+  right:15px;
+  top:50%;
+  width:8px;
+  height:8px;
+  border-right:2px solid rgba(255,255,255,.52);
+  border-bottom:2px solid rgba(255,255,255,.52);
+  transform:translateY(-65%) rotate(45deg);
+  pointer-events:none;
+}
+.key-selector select{
+  height:44px;
+  margin-top:0;
+  padding:0 42px 0 14px;
+  border-radius:9px;
+  color:rgba(255,255,255,.86);
+  background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.04));
+  background-image:none;
+  border:1px solid rgba(255,255,255,.105);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  font-size:.9em;
+  font-weight:600;
+}
+.key-selector select:hover{border-color:rgba(255,255,255,.18);background-color:rgba(255,255,255,.07)}
+.key-selector select:focus{border-color:rgba(0,212,170,.62);box-shadow:0 0 0 2px rgba(0,212,170,.09),inset 0 1px 0 rgba(255,255,255,.035)}
+.key-selector select option{background:#1a1f35;color:var(--text)}
+.section-actions{align-items:center}
+.section-actions .action-primary{padding:9px 15px;border-radius:9px}
+@media(max-width:760px){
+  .vault-ribbon{flex-wrap:wrap;align-items:flex-start}
+  .vault-meta{width:100%;white-space:normal}
+  .vault-actions{justify-content:flex-start}
+}
+
+
+/* ===== Three-line vault status ===== */
+.vault-ribbon{
+  display:block;
+  min-height:0;
+  padding:10px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+}
+.vault-meta{
+  display:grid;
+  gap:6px;
+  font-size:.78em;
+  line-height:1.35;
+  white-space:normal;
+  overflow:visible;
+}
+.vault-meta:before{display:none}
+.vault-line{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+.vault-file-name{font-size:1.02em;font-weight:700;color:rgba(255,255,255,.9);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.vault-state{padding:2px 7px;border-radius:999px;font-size:.72em;font-weight:700;background:rgba(0,212,170,.12);color:var(--accent);border:1px solid rgba(0,212,170,.22)}
+.vault-state.warn{background:rgba(255,165,2,.12);color:var(--warn);border-color:rgba(255,165,2,.24)}
+.vault-detail{color:var(--muted)}
+.vault-detail strong{color:rgba(255,255,255,.82);font-weight:650}
+.vault-actions{margin-top:7px;display:flex;gap:6px;justify-content:flex-start;flex-wrap:wrap}
+.vault-actions .btn-ghost{padding:4px 8px;min-height:26px;font-size:.7em}
+.setup-action.restore-ready{display:block!important;border-color:rgba(255,165,2,.32);background:rgba(255,165,2,.08)}
+
+
+/* ===== Unified content rail polish ===== */
+:root{--tool-width:620px;--tool-gap:12px}
+.app-shell{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.app-shell>.tabs,
+.app-shell>.vault-ribbon,
+.app-shell>.panel{
+  width:min(100%,var(--tool-width));
+  max-width:var(--tool-width);
+  margin-left:auto;
+  margin-right:auto;
+}
+.tabs{
+  margin-bottom:14px;
+  justify-content:center;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:12px;
+}
+.vault-ribbon{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  margin:0 auto var(--tool-gap);
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.038);
+  border:1px solid rgba(255,255,255,.085);
+  box-shadow:none;
+}
+.vault-meta{
+  width:100%;
+  display:grid;
+  gap:6px;
+  font-size:.78em;
+  line-height:1.35;
+  color:var(--muted);
+}
+.vault-line{
+  width:100%;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.vault-line:first-child{
+  justify-content:space-between;
+  flex-wrap:nowrap;
+}
+.vault-file-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:.98em;
+  line-height:1.35;
+  font-weight:700;
+  color:rgba(255,255,255,.9);
+}
+.vault-state{
+  flex:0 0 auto;
+  padding:2px 7px;
+  border-radius:999px;
+  font-size:.72em;
+  font-weight:700;
+  background:rgba(0,212,170,.12);
+  color:var(--accent);
+  border:1px solid rgba(0,212,170,.22);
+}
+.vault-state.warn{background:rgba(255,165,2,.12);color:var(--warn);border-color:rgba(255,165,2,.24)}
+.vault-detail{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  font-size:.92em;
+  color:var(--muted);
+}
+.vault-detail span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.vault-detail strong{color:rgba(255,255,255,.82);font-weight:650}
+.vault-actions{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  margin-top:0;
+  padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.vault-actions .btn-ghost{
+  width:100%;
+  min-height:28px;
+  padding:5px 10px;
+  border-radius:8px;
+  line-height:1;
+  text-align:center;
+  color:rgba(255,255,255,.58);
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+}
+.vault-actions .btn-ghost:hover{color:var(--text);background:rgba(255,255,255,.085)}
+.panel{
+  margin-left:auto;
+  margin-right:auto;
+}
+.card{
+  width:100%;
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  border-color:rgba(255,255,255,.085);
+  box-shadow:0 18px 44px rgba(0,0,0,.18);
+}
+@media(max-width:700px){
+  :root{--tool-width:100%}
+  .app-shell>.tabs,.app-shell>.vault-ribbon,.app-shell>.panel{max-width:100%}
+  .vault-detail{grid-template-columns:1fr;gap:4px}
+  .vault-actions{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
 <h1>WPPMachineAuth 授权码生成器</h1>
-<p class="subtitle"> RSA 加密 · 多项目密钥管理 </p>
+<p class="subtitle">RSA 加密 · 本地 JSON 密钥库</p>
 
+<div class="setup-shell" id="setupShell">
+  <div class="setup-panel">
+    <div class="setup-kicker">Local key vault</div>
+    <h2 class="setup-title">先绑定一个本地 JSON 密钥库</h2>
+    <p class="setup-copy">
+      所有项目密钥都会写入你选择的 JSON 文件。授权码生成、密钥导入、新建密钥和签发次数统计都读取同一个文件，不再把私钥保存在浏览器缓存里。
+    </p>
+    <div class="setup-warning">
+      Chrome / Edge 可以记住本地文件授权，下次打开会自动读取。浏览器只保存文件句柄权限，不保存密钥内容。
+    </div>
+  </div>
+  <div class="setup-panel">
+    <div class="setup-actions">
+      <button class="setup-action primary" onclick="createKeyStoreFile()">
+        <strong>创建 JSON 密钥库</strong>
+        <span>选择保存位置并生成一个空的 WPPMachineAuth 密钥库文件。</span>
+      </button>
+      <button class="setup-action" id="restoreKeyStoreButton" onclick="restoreLastKeyStore()" style="display:none">
+        <strong>恢复上次密钥库</strong>
+        <span>浏览器已记住上次选择的 JSON 文件，点击后重新授权读取。</span>
+      </button>
+      <button class="setup-action" onclick="openKeyStoreFile()">
+        <strong>打开已有 JSON 密钥库</strong>
+        <span>选择之前创建的密钥库，读取里面的所有密钥列表。</span>
+      </button>
+      <button class="setup-action" id="migrateOldKeysButton" onclick="migrateOldLocalStorageKeys()">
+        <strong>迁移浏览器旧密钥</strong>
+        <span>检测到旧 localStorage 密钥时，将它们一次性写入 JSON 文件。</span>
+      </button>
+    </div>
+    <div class="setup-message" id="setupMessage"></div>
+  </div>
+</div>
+
+<div class="app-shell hidden" id="appShell">
 <div class="tabs">
   <button class="tab active" onclick="switchTab(this, 'generate')">生成授权码</button>
   <button class="tab" onclick="switchTab(this, 'keys')">密钥管理</button>
@@ -147,18 +473,27 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   <button class="tab" onclick="switchTab(this, 'about')">关于作者</button>
 </div>
 
+<div class="vault-ribbon" id="keyStoreBar">
+  <div class="vault-meta" id="keyStoreMeta">正在读取密钥库...</div>
+  <div class="vault-actions">
+    <button class="btn-ghost" onclick="refreshKeyStore()">刷新读取</button>
+    <button class="btn-ghost" onclick="downloadKeyStoreBackup()">备份导出</button>
+    <button class="btn-ghost" onclick="openKeyStoreFile()">切换密钥库</button>
+  </div>
+</div>
+
 <div class="panel show" id="panel-generate">
   <div class="card">
-    <label style="margin-top:0">当前使用的密钥对</label>
+    <label style="margin-top:0">当前使用的密钥列表</label>
     <div class="key-selector" id="keySelector">
       <div class="key-info">
         <select id="activeKeySelect" onchange="onSelectActiveKey()">
-          <option value="">-- 请选择密钥对 --</option>
+          <option value="">-- 请选择密钥列表 --</option>
         </select>
       </div>
     </div>
     <div class="key-status no" id="keyStatus">
-      <span>⚠️ 未选择密钥，请先到「密钥管理」创建或导入</span>
+      <span>⚠️ 未选择密钥，请先到「密钥管理」创建，或切换到已有密钥库</span>
     </div>
 
     <label for="machineCode">客户机器码 *</label>
@@ -188,19 +523,23 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 
 <div class="panel" id="panel-keys">
   <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <h3 style="font-size:1.05em">密钥对列表</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn-sm" onclick="importExistingKey()" style="margin:0">导入已有私钥</button><button class="btn-sm" onclick="openNewKeyModal()" style="margin:0">+ 新建密钥对</button></div>
+    <div class="section-toolbar">
+      <div class="section-title">
+        <h3>密钥列表</h3>
+        <div class="section-subtitle" id="keyListSummary">本地 JSON 密钥库中的项目密钥</div>
+      </div>
+      <div class="section-actions">
+        <button class="action-primary" onclick="openNewKeyModal()">新建密钥</button>
+      </div>
     </div>
 
     <div id="keyListContainer"></div>
   </div>
 
   <div class="tip">
-    <strong>关于密钥唯一性：</strong>每次生成 RSA 密钥对时，都会从两个超大素数中随机计算。
-    2048 位密钥的碰撞概率为 1/2^2048（约 1/10^616），两个人生成相同密钥的概率为零。
-    <br><br>
-    <strong>推荐做法：</strong>每个 UE5 项目使用独立的密钥对，这样即使某个项目的私钥泄露，其他项目不受影响。
+
+
+    <strong>推荐做法：</strong>每个 UE5 项目使用独立的密钥，这样即使某个项目的私钥泄露，其他项目不受影响。
   </div>
 </div>
 
@@ -208,18 +547,16 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
   <div class="card">
     <h3 style="margin-bottom:14px;font-size:1.05em">完整使用流程</h3>
     <div style="font-size:.88em;line-height:1.8;color:rgba(255,255,255,.75)">
-      <p><strong style="color:var(--accent)">第一步：创建密钥对</strong></p>
+      <p><strong style="color:var(--accent)">第一步：创建密钥</strong></p>
       <ol style="margin-left:20px;margin-bottom:16px">
         <li>切换到「密钥管理」标签页</li>
-        <li>点击「+ 新建密钥对」，输入项目名称</li>
-        <li>生成后导出私钥 .pem 文件，离线备份到安全位置</li>
-        <li>复制公钥，填入 UE Widget 的 RSAPublicKey 字段</li>
-        <li>也可以在 Create Widget 节点创建时传入 RSAPublicKey</li>
+        <li>点击「+ 新建密钥」，输入项目名称</li>
+        <li>复制公钥，在 Create Widget 节点创建时传入 RSAPublicKey</li>
       </ol>
 
       <p><strong style="color:var(--accent)">第二步：签发授权码</strong></p>
       <ol style="margin-left:20px;margin-bottom:16px">
-        <li>在「生成授权码」页面选择密钥对</li>
+        <li>在「生成授权码」页面选择密钥</li>
         <li>输入客户机器码和授权天数</li>
         <li>点击生成，复制授权码发给客户</li>
       </ol>
@@ -227,7 +564,7 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
       <p><strong style="color:var(--accent)">第三步：客户激活</strong></p>
       <ol style="margin-left:20px;margin-bottom:16px">
         <li>客户在 UE5 应用中粘贴授权码</li>
-        <li>点击授权界面中的 ActivateButton 对应按钮</li>
+        <li>点击授权界面中的 验证  按钮</li>
         <li>插件校验机器码、有效期和使用次数</li>
         <li>通过 OnMachineAuthResult 返回成功或失败结果</li>
       </ol>
@@ -235,16 +572,16 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
       <p><strong style="color:var(--warn)">私钥安全</strong></p>
       <div style="background:rgba(255,165,2,.08);border:1px solid rgba(255,165,2,.18);padding:14px;border-radius:8px;margin-bottom:16px;font-size:.88em;line-height:1.7">
         HTML 工具可以公开，公钥也可以放进 UE 项目；真正不能泄露的是私钥。
-        当前工具会把密钥保存在浏览器 localStorage 中，不要把私钥写进 HTML、提交到 GitHub，或交给客户使用。
+        当前工具只把密钥保存在你选择的本地 JSON 文件中；浏览器最多保存文件句柄权限，不保存私钥内容。不要把私钥交给客户使用。
       </div>
 
       <p><strong style="color:var(--accent2)">多项目架构</strong></p>
       <div style="background:rgba(0,0,0,.3);padding:14px;border-radius:8px;margin-top:8px;font-size:.88em;line-height:1.7">
-        项目A 的 UE5 代码里 → 嵌入密钥对A 的公钥<br>
-        项目B 的 UE5 代码里 → 嵌入密钥对B 的公钥<br>
-        项目C 的 UE5 代码里 → 嵌入密钥对C 的公钥<br><br>
-        用密钥对A签发的授权码 → 只能被项目A验证<br>
-        用密钥对B签发的授权码 → 只能被项目B验证<br>
+        项目A 的 UE5 代码里 → 嵌入密钥A 的公钥<br>
+        项目B 的 UE5 代码里 → 嵌入密钥B 的公钥<br>
+        项目C 的 UE5 代码里 → 嵌入密钥C 的公钥<br><br>
+        用密钥A签发的授权码 → 只能被项目A验证<br>
+        用密钥B签发的授权码 → 只能被项目B验证<br>
         <strong style="color:var(--accent)">互不干扰，私钥泄露只影响单个项目</strong>
       </div>
     </div>
@@ -254,9 +591,9 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 <div class="panel" id="panel-about">
   <div class="card" style="display:flex; flex-direction:column; align-items:center;">
     <img src="https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/icon.png" alt="常胜将军王胖胖" style="width:110px;height:110px;border-radius:50%;margin-bottom:16px;border:3px solid var(--accent);object-fit:cover;background:rgba(255,255,255,.04);box-shadow:0 4px 15px rgba(0,212,170,.3);">
-    
+
     <h2 style="font-size:1.4em; margin-bottom:8px;">常胜将军王胖胖</h2>
-    
+
     <div style="background:rgba(0,212,170,.1); border:1px solid rgba(0,212,170,.3); color:var(--accent); padding:10px 24px; border-radius:20px; font-weight:bold; margin-bottom:24px;">
       售后 +V: 17610986288
     </div>
@@ -280,7 +617,7 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 
 <div class="modal-overlay" id="newKeyModal">
   <div class="modal">
-    <h3>新建密钥对</h3>
+    <h3>新建密钥</h3>
     <label for="newKeyName" style="margin-top:0">项目名称 *</label>
     <input type="text" id="newKeyName" placeholder="例如: 我的第一款游戏">
 
@@ -311,14 +648,12 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
     <label style="margin-top:0">私钥 (机密！绝不放入 UE 项目)</label>
     <textarea id="detailPrivateKey" rows="6" readonly></textarea>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn-sm" onclick="exportDetailKey('private')">导出私钥 .pem</button>
       <button class="btn-sm" onclick="copyDetailKey('private')">📋 复制私钥</button>
     </div>
 
     <label>公钥 (嵌入 UE5 C++ 代码)</label>
     <textarea id="detailPublicKey" rows="6" readonly></textarea>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn-sm" onclick="exportDetailKey('public')">导出公钥 .pem</button>
       <button class="btn-sm" onclick="copyDetailKey('public')">📋 复制公钥</button>
     </div>
 
@@ -330,34 +665,364 @@ button{padding:12px 24px;border:none;border-radius:10px;font-size:.95em;font-wei
 
 <script>
 // =========================================================================
-// 数据层 — 密钥列表存储在 localStorage
+// 数据层 — 本地 JSON 密钥库
 // =========================================================================
-const STORAGE_KEYS = 'ue5_license_keys';      // 密钥对列表
-const STORAGE_ACTIVE = 'ue5_license_active';  // 当前选中的密钥 ID
+const LEGACY_STORAGE_KEYS = 'ue5_license_keys';
+const LEGACY_STORAGE_ACTIVE = 'ue5_license_active';
+const KEYSTORE_DB_NAME = 'wpp_machine_auth_license_tool';
+const KEYSTORE_DB_VERSION = 1;
+const KEYSTORE_STORE = 'settings';
+const KEYSTORE_HANDLE_KEY = 'keyStoreHandle';
+const KEYSTORE_ACTIVE_KEY = 'activeKeyId';
+
+let keyStoreHandle = null;
+let keyStoreData = createEmptyKeyStore();
+let keyStoreFileName = '';
+let keyStoreLastSavedAt = null;
+let activeKeyId = '';
+let fallbackMode = false;
+let viewingKey = null;
+let keyStorePermissionState = 'unknown';
+let keyStoreRestoreAvailable = false;
+let keyStoreStatusText = '未选择';
+
+function supportsFileSystemAccess() {
+  return !!(window.showOpenFilePicker && window.showSaveFilePicker && window.indexedDB);
+}
+
+function createEmptyKeyStore() {
+  return { version: 1, activeKeyId: '', keys: [] };
+}
+
+function normalizeKeyStore(data) {
+  if (!data || typeof data !== 'object') throw new Error('JSON 文件不是有效的对象');
+  const keys = Array.isArray(data.keys) ? data.keys : [];
+  return {
+    version: Number(data.version) || 1,
+    activeKeyId: typeof data.activeKeyId === 'string' ? data.activeKeyId : '',
+    keys: keys.map(k => ({
+      id: String(k.id || ('key_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6))),
+      name: String(k.name || '未命名密钥'),
+      size: Number(k.size) || 2048,
+      privateKey: String(k.privateKey || ''),
+      publicKey: String(k.publicKey || ''),
+      createdAt: Number(k.createdAt) || Date.now(),
+      issueCount: Number(k.issueCount) || 0,
+      lastIssuedAt: k.lastIssuedAt || null
+    })).filter(k => k.privateKey && k.publicKey)
+  };
+}
+
+function openKeyStoreDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(KEYSTORE_DB_NAME, KEYSTORE_DB_VERSION);
+    request.onupgradeneeded = () => request.result.createObjectStore(KEYSTORE_STORE);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function idbGet(key) {
+  const db = await openKeyStoreDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(KEYSTORE_STORE, 'readonly').objectStore(KEYSTORE_STORE).get(key);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function idbSet(key, value) {
+  const db = await openKeyStoreDb();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction(KEYSTORE_STORE, 'readwrite').objectStore(KEYSTORE_STORE).put(value, key);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function initKeyStore() {
+  updateLegacyMigrationButton();
+  updateRestoreButton();
+  if (!supportsFileSystemAccess()) {
+    fallbackMode = true;
+    keyStoreStatusText = '浏览器不支持';
+    showSetup('当前浏览器不支持直接读写本地 JSON 文件，请使用 Chrome 或 Edge。普通网页不能绕过浏览器的本地文件授权。', 'error');
+    return;
+  }
+
+  try {
+    keyStoreHandle = await idbGet(KEYSTORE_HANDLE_KEY);
+    activeKeyId = await idbGet(KEYSTORE_ACTIVE_KEY) || '';
+    if (!keyStoreHandle) {
+      keyStoreStatusText = '未选择';
+      showSetup('还没有绑定本地 JSON 密钥库。请选择创建或打开。', 'info');
+      return;
+    }
+
+    keyStoreFileName = keyStoreHandle.name || 'wpp-machine-auth-keys.json';
+    keyStorePermissionState = await queryKeyStorePermission(keyStoreHandle, 'readwrite');
+    if (keyStorePermissionState !== 'granted') {
+      keyStoreRestoreAvailable = true;
+      keyStoreStatusText = '\u9700\u8981\u8bfb\u5199\u6388\u6743';
+      updateRestoreButton();
+      showSetup('\u5df2\u8bb0\u4f4f\u4e0a\u6b21\u7684 JSON \u5bc6\u94a5\u5e93\uff0c\u4f46\u6d4f\u89c8\u5668\u9700\u8981\u4f60\u70b9\u51fb\u201c\u6062\u590d\u4e0a\u6b21\u5bc6\u94a5\u5e93\u201d\u91cd\u65b0\u6388\u4e88\u8bfb\u5199\u6743\u9650\u3002', 'info');
+      return;
+    }
+
+    await readKeyStore();
+    keyStoreRestoreAvailable = false;
+    keyStoreStatusText = '已连接';
+    showReady();
+  } catch (e) {
+    keyStoreStatusText = '读取失败';
+    showSetup('密钥库读取失败：' + e.message + '。如果浏览器清理了站点数据，请重新打开 JSON 文件。', 'error');
+  }
+}
+
+async function queryKeyStorePermission(handle, mode) {
+  if (!handle || !handle.queryPermission) return 'denied';
+  return await handle.queryPermission({ mode: mode || 'read' });
+}
+
+async function verifyKeyStorePermission(handle, mode, requestIfNeeded) {
+  const accessMode = mode === 'readwrite' ? 'readwrite' : 'read';
+  if (!handle) return false;
+  const options = { mode: accessMode };
+  keyStorePermissionState = handle.queryPermission ? await handle.queryPermission(options) : 'denied';
+  if (keyStorePermissionState === 'granted') return true;
+  if (!requestIfNeeded || !handle.requestPermission) return false;
+  keyStorePermissionState = await handle.requestPermission(options);
+  return keyStorePermissionState === 'granted';
+}
+
+async function createKeyStoreFile() {
+  if (!supportsFileSystemAccess()) {
+    showSetup('当前浏览器不支持创建本地 JSON 密钥库，请使用 Chrome 或 Edge。', 'error');
+    return;
+  }
+
+  try {
+    keyStoreHandle = await window.showSaveFilePicker({
+      suggestedName: 'wpp-machine-auth-keys.json',
+      types: [{ description: 'WPPMachineAuth key store', accept: { 'application/json': ['.json'] } }]
+    });
+    keyStoreData = createEmptyKeyStore();
+    activeKeyId = '';
+    keyStoreFileName = keyStoreHandle.name || 'wpp-machine-auth-keys.json';
+    const writeReady = await verifyKeyStorePermission(keyStoreHandle, 'readwrite', true);
+    if (!writeReady) throw new Error('\u6ca1\u6709\u83b7\u5f97 JSON \u5bc6\u94a5\u5e93\u7684\u5199\u5165\u6743\u9650');
+    keyStoreRestoreAvailable = false;
+    keyStoreStatusText = '\u5df2\u8fde\u63a5';
+    await idbSet(KEYSTORE_HANDLE_KEY, keyStoreHandle);
+    await idbSet(KEYSTORE_ACTIVE_KEY, activeKeyId);
+    await writeKeyStore();
+    showReady();
+  } catch (e) {
+    if (e.name !== 'AbortError') showSetup('创建密钥库失败：' + e.message + '。浏览器必须显示本地保存窗口，网页不能静默创建本地文件。', 'error');
+  }
+}
+
+async function restoreLastKeyStore() {
+  if (!keyStoreHandle) {
+    showSetup('没有找到上次的密钥库记录，请重新打开 JSON 文件。', 'error');
+    return;
+  }
+  try {
+    const permission = await verifyKeyStorePermission(keyStoreHandle, 'readwrite', true);
+    if (!permission) {
+      keyStoreStatusText = '\u9700\u8981\u8bfb\u5199\u6388\u6743';
+      showSetup('\u6d4f\u89c8\u5668\u6ca1\u6709\u6388\u4e88 JSON \u5bc6\u94a5\u5e93\u8bfb\u5199\u6743\u9650\uff0c\u8bf7\u70b9\u51fb\u201c\u6062\u590d\u4e0a\u6b21\u5bc6\u94a5\u5e93\u201d\u91cd\u65b0\u6388\u6743\uff0c\u6216\u91cd\u65b0\u6253\u5f00 JSON \u6587\u4ef6\u3002', 'error');
+      return;
+    }
+    await readKeyStore();
+    keyStoreRestoreAvailable = false;
+    keyStoreStatusText = '已连接';
+    await idbSet(KEYSTORE_HANDLE_KEY, keyStoreHandle);
+    showReady();
+  } catch (e) {
+    keyStoreStatusText = '恢复失败';
+    showSetup('恢复上次密钥库失败：' + e.message + '。请重新打开 JSON 文件。', 'error');
+  }
+}
+
+async function openKeyStoreFile() {
+  if (!supportsFileSystemAccess()) {
+    showSetup('当前浏览器不支持直接打开本地 JSON 密钥库，请使用 Chrome 或 Edge。', 'error');
+    return;
+  }
+
+  try {
+    const handles = await window.showOpenFilePicker({
+      multiple: false,
+      types: [{ description: 'WPPMachineAuth key store', accept: { 'application/json': ['.json'] } }]
+    });
+    keyStoreHandle = handles[0];
+    const writeReady = await verifyKeyStorePermission(keyStoreHandle, 'readwrite', true);
+    if (!writeReady) throw new Error('\u6ca1\u6709\u83b7\u5f97 JSON \u5bc6\u94a5\u5e93\u7684\u5199\u5165\u6743\u9650');
+    keyStoreRestoreAvailable = false;
+    keyStoreStatusText = '\u5df2\u8fde\u63a5';
+    await idbSet(KEYSTORE_HANDLE_KEY, keyStoreHandle);
+    activeKeyId = await idbGet(KEYSTORE_ACTIVE_KEY) || '';
+    await readKeyStore();
+    showReady();
+  } catch (e) {
+    if (e.name !== 'AbortError') showSetup('打开密钥库失败：' + e.message + '。浏览器必须由用户点击后打开文件选择窗口。', 'error');
+  }
+}
+
+async function readKeyStore() {
+  if (!keyStoreHandle) throw new Error('尚未选择 JSON 密钥库文件');
+  const file = await keyStoreHandle.getFile();
+  const text = await file.text();
+  keyStoreData = normalizeKeyStore(text.trim() ? JSON.parse(text) : createEmptyKeyStore());
+  keyStoreFileName = file.name || keyStoreHandle.name || 'wpp-machine-auth-keys.json';
+  activeKeyId = keyStoreData.activeKeyId || activeKeyId || '';
+  if (activeKeyId && !keyStoreData.keys.some(k => k.id === activeKeyId)) activeKeyId = '';
+  keyStoreData.activeKeyId = activeKeyId;
+  keyStoreLastSavedAt = file.lastModified ? new Date(file.lastModified) : null;
+}
+
+async function writeKeyStore() {
+  keyStoreData.version = 1;
+  keyStoreData.activeKeyId = activeKeyId || '';
+  if (keyStoreHandle && supportsFileSystemAccess()) {
+    const permission = await verifyKeyStorePermission(keyStoreHandle, 'readwrite', false);
+    if (!permission) throw new Error('\u6ca1\u6709\u8bfb\u5199 JSON \u5bc6\u94a5\u5e93\u7684\u6743\u9650\uff0c\u8bf7\u901a\u8fc7\u201c\u6062\u590d\u4e0a\u6b21\u5bc6\u94a5\u5e93\u201d\u6216\u201c\u5207\u6362\u5bc6\u94a5\u5e93\u201d\u6388\u4e88\u8bfb\u5199\u6743\u9650');
+    const writable = await keyStoreHandle.createWritable();
+    await writable.write(JSON.stringify(keyStoreData, null, 2));
+    await writable.close();
+    await idbSet(KEYSTORE_HANDLE_KEY, keyStoreHandle);
+  }
+  await idbSet(KEYSTORE_ACTIVE_KEY, activeKeyId || '');
+  keyStoreLastSavedAt = new Date();
+  renderKeyStoreMeta();
+}
 
 function loadKeys() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS)) || []; }
-  catch { return []; }
-}
-function saveKeys(keys) {
-  localStorage.setItem(STORAGE_KEYS, JSON.stringify(keys));
-}
-function loadActiveKeyId() {
-  return localStorage.getItem(STORAGE_ACTIVE) || '';
-}
-function saveActiveKeyId(id) {
-  localStorage.setItem(STORAGE_ACTIVE, id);
+  return keyStoreData.keys || [];
 }
 
-let activeKeyId = loadActiveKeyId();
+async function saveKeys(keys) {
+  keyStoreData.keys = keys;
+  await writeKeyStore();
+}
+
+function loadActiveKeyId() {
+  return activeKeyId || '';
+}
+
+async function saveActiveKeyId(id) {
+  activeKeyId = id || '';
+  keyStoreData.activeKeyId = activeKeyId;
+  await writeKeyStore();
+}
+
+function showSetup(message, type) {
+  document.getElementById('setupShell').classList.add('show');
+  document.getElementById('appShell').classList.add('hidden');
+  setSetupMessage(message, type || 'info');
+  updateLegacyMigrationButton();
+  updateRestoreButton();
+}
+
+function showReady() {
+  document.getElementById('setupShell').classList.remove('show');
+  document.getElementById('appShell').classList.remove('hidden');
+  renderKeySelector();
+  renderKeyList();
+  updateKeyStatus();
+  renderKeyStoreMeta();
+}
+
+function setSetupMessage(message, type) {
+  const el = document.getElementById('setupMessage');
+  el.className = 'setup-message show ' + (type || 'info');
+  el.textContent = message || '';
+}
+
+function hasLegacyKeys() {
+  try { return (JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEYS)) || []).length > 0; }
+  catch { return false; }
+}
+
+function updateLegacyMigrationButton() {
+  const btn = document.getElementById('migrateOldKeysButton');
+  if (btn) btn.style.display = hasLegacyKeys() ? 'block' : 'none';
+}
+
+function updateRestoreButton() {
+  const btn = document.getElementById('restoreKeyStoreButton');
+  if (!btn) return;
+  btn.style.display = keyStoreRestoreAvailable ? 'block' : 'none';
+  btn.classList.toggle('restore-ready', keyStoreRestoreAvailable);
+  const name = keyStoreFileName || keyStoreHandle?.name || '上次选择的 JSON 文件';
+  const span = btn.querySelector('span');
+  if (span) span.textContent = '\u6062\u590d ' + name + '\uff0c\u6d4f\u89c8\u5668\u4f1a\u8bf7\u6c42\u4e00\u6b21\u8bfb\u5199\u6388\u6743\u3002';
+}
+
+async function migrateOldLocalStorageKeys() {
+  let legacyKeys = [];
+  try { legacyKeys = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEYS)) || []; }
+  catch { legacyKeys = []; }
+  if (legacyKeys.length === 0) {
+    showSetup('没有检测到旧浏览器密钥。', 'info');
+    return;
+  }
+
+  try {
+    if (!keyStoreHandle) await createKeyStoreFile();
+    if (!keyStoreHandle) return;
+    keyStoreData.keys = normalizeKeyStore({ version: 1, keys: legacyKeys }).keys;
+    activeKeyId = localStorage.getItem(LEGACY_STORAGE_ACTIVE) || keyStoreData.activeKeyId || '';
+    if (activeKeyId && !keyStoreData.keys.some(k => k.id === activeKeyId)) activeKeyId = keyStoreData.keys[0]?.id || '';
+    await writeKeyStore();
+    localStorage.removeItem(LEGACY_STORAGE_KEYS);
+    localStorage.removeItem(LEGACY_STORAGE_ACTIVE);
+    showReady();
+    alert('旧密钥已迁移到 JSON 密钥库，并已清理浏览器旧缓存。');
+  } catch (e) {
+    showSetup('迁移失败：' + e.message, 'error');
+  }
+}
+
+function renderKeyStoreMeta() {
+  const el = document.getElementById('keyStoreMeta');
+  if (!el) return;
+  const key = getActiveKey();
+  const saved = keyStoreLastSavedAt ? keyStoreLastSavedAt.toLocaleString() : '尚未保存';
+  const fileName = keyStoreFileName || keyStoreHandle?.name || '未选择密钥库';
+  const state = keyStoreStatusText || (keyStoreHandle ? '已连接' : '未选择');
+  const stateClass = state === '已连接' ? '' : ' warn';
+  el.innerHTML =
+    '<div class="vault-line">' +
+      '<span class="vault-file-name">JSON: ' + escHtml(fileName) + '</span>' +
+      '<span class="vault-state' + stateClass + '">' + escHtml(state) + '</span>' +
+    '</div>' +
+    '<div class="vault-line vault-detail">' +
+      '<span><strong>' + loadKeys().length + '</strong> 个密钥</span>' +
+      '<span>当前：<strong>' + (key ? escHtml(key.name) : '未选择') + '</strong></span>' +
+      '<span>保存：' + escHtml(saved) + '</span>' +
+    '</div>';
+}
+
+async function refreshKeyStore() {
+  try {
+    await readKeyStore();
+    showReady();
+  } catch (e) {
+    showSetup('刷新读取失败：' + e.message, 'error');
+  }
+}
+
+function downloadKeyStoreBackup() {
+  downloadFile('wpp-machine-auth-keys.backup.json', JSON.stringify(keyStoreData, null, 2), 'application/json');
+}
 
 // =========================================================================
 // 初始化
 // =========================================================================
-(function init() {
-  renderKeySelector();
-  renderKeyList();
-  updateKeyStatus();
+(async function init() {
+  await initKeyStore();
 })();
 
 // =========================================================================
@@ -376,7 +1041,7 @@ function switchTab(element, name) {
 function renderKeySelector() {
   const sel = document.getElementById('activeKeySelect');
   const keys = loadKeys();
-  sel.innerHTML = '<option value="">-- 请选择密钥对 --</option>';
+  sel.innerHTML = '<option value="">-- 请选择密钥 --</option>';
   keys.forEach(k => {
     const opt = document.createElement('option');
     opt.value = k.id;
@@ -386,10 +1051,11 @@ function renderKeySelector() {
   });
 }
 
-function onSelectActiveKey() {
+async function onSelectActiveKey() {
   activeKeyId = document.getElementById('activeKeySelect').value;
-  saveActiveKeyId(activeKeyId);
+  await saveActiveKeyId(activeKeyId);
   updateKeyStatus();
+  renderKeyStoreMeta();
 }
 
 function getActiveKey() {
@@ -402,10 +1068,10 @@ function updateKeyStatus() {
   const key = getActiveKey();
   if (key) {
     el.className = 'key-status ok';
-    el.innerHTML = `✅ 已选择密钥: <strong>${key.name}</strong> (${key.size}位)`;
+    el.innerHTML = `✅ 已选择密钥: <strong>${escHtml(key.name)}</strong> (${key.size}位)`;
   } else {
     el.className = 'key-status no';
-    el.innerHTML = '⚠️ 未选择密钥，请先到「密钥管理」创建或导入';
+    el.innerHTML = '⚠️ 未选择密钥，请先到「密钥管理」创建，或切换到已有密钥库';
   }
 }
 
@@ -414,15 +1080,15 @@ function updateKeyStatus() {
 // =========================================================================
 function renderKeyList() {
   const container = document.getElementById('keyListContainer');
+  const summary = document.getElementById('keyListSummary');
   const keys = loadKeys();
+  const active = getActiveKey();
+  if (summary) {
+    summary.textContent = keys.length + ' 个密钥' + (active ? ' · 当前启用：' + active.name : ' · 尚未选择启用密钥');
+  }
 
   if (keys.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="icon">🔐</div>
-        <p>还没有密钥对</p>
-        <p style="font-size:.82em;margin-top:4px">点击右上角「+ 新建密钥对」开始</p>
-      </div>`;
+    container.innerHTML = '<div class="empty-state"><div class="icon">KEY</div><p>JSON 密钥库里还没有密钥</p><p style="font-size:.82em;margin-top:4px">点击右上角「新建密钥」开始，或通过上方「切换密钥库」打开已有 JSON 文件。</p></div>';
     return;
   }
 
@@ -430,54 +1096,63 @@ function renderKeyList() {
   keys.forEach(k => {
     const isActive = k.id === activeKeyId;
     const created = new Date(k.createdAt).toLocaleDateString();
-    html += `
-      <div class="key-item${isActive ? ' active' : ''}" onclick="selectKey(this, '${k.id}')">
-        <div class="key-icon">🔑</div>
-        <div class="key-info">
-          <div class="key-name">${escHtml(k.name)}</div>
-          <div class="key-meta">
-            <span class="badge badge-size">${k.size}位</span>
-            <span class="badge badge-count">已签发 ${k.issueCount || 0} 次</span>
-            <span>创建于 ${created}</span>
-          </div>
-        </div>
-        <div class="key-actions" onclick="event.stopPropagation()">
-          <button class="btn-sm" onclick="viewKeyDetail('${k.id}')" style="margin:0">查看</button>
-          <button class="btn-danger" onclick="deleteKey('${k.id}')" style="margin:0;padding:5px 10px">删除</button>
-        </div>
-      </div>`;
+    const lastIssued = k.lastIssuedAt ? new Date(k.lastIssuedAt).toLocaleDateString() : '未签发';
+    html +=
+      '<div class="key-card' + (isActive ? ' key-card-active' : '') + '" onclick="selectKey(this, \'" + k.id + "\')">' +
+        '<div class="key-mark">KEY</div>' +
+        '<div class="key-info">' +
+          '<div class="key-name">' + escHtml(k.name) + '</div>' +
+          '<div class="key-meta">' +
+            (isActive ? '<span class="badge badge-active">当前启用</span>' : '') +
+            '<span class="badge badge-size">RSA ' + k.size + ' 位</span>' +
+            '<span class="badge badge-count">已签发 ' + (k.issueCount || 0) + ' 次</span>' +
+            '<span>创建 ' + created + '</span>' +
+            '<span>最后签发 ' + lastIssued + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="key-actions" onclick="event.stopPropagation()">' +
+          '<button class="btn-sm" onclick="copyPublicKey(\'' + k.id + '\')">复制公钥</button>' +
+          '<button class="btn-sm" onclick="viewKeyDetail(\'' + k.id + '\')">详情</button>' +
+          '<button class="btn-danger" onclick="deleteKey(\'' + k.id + '\')">删除</button>' +
+        '</div>' +
+      '</div>';
   });
   html += '</div>';
   container.innerHTML = html;
 }
 
-function selectKey(element, id) {
+async function selectKey(element, id) {
   activeKeyId = id;
-  saveActiveKeyId(id);
+  await saveActiveKeyId(id);
   renderKeySelector();
   renderKeyList();
   updateKeyStatus();
+  renderKeyStoreMeta();
 }
 
-function deleteKey(id) {
+async function deleteKey(id) {
   const keys = loadKeys();
   const key = keys.find(k => k.id === id);
   if (!key) return;
-  if (!confirm(`确定删除密钥对「${key.name}」？\n\n删除后用该密钥签发的授权码将无法再生成，但已发给客户的仍可使用。\n建议先导出私钥备份！`)) return;
+  if (!confirm(`确定删除密钥「${key.name}」？\n\n删除后用该密钥签发的授权码将无法再生成，但已发给客户的仍可使用。`)) return;
 
   const newKeys = keys.filter(k => k.id !== id);
-  saveKeys(newKeys);
-  if (activeKeyId === id) {
-    activeKeyId = newKeys.length > 0 ? newKeys[0].id : '';
-    saveActiveKeyId(activeKeyId);
-  }
+  if (activeKeyId === id) activeKeyId = newKeys.length > 0 ? newKeys[0].id : '';
+  await saveKeys(newKeys);
+  await saveActiveKeyId(activeKeyId);
   renderKeySelector();
   renderKeyList();
   updateKeyStatus();
+  renderKeyStoreMeta();
+}
+
+function copyPublicKey(id) {
+  const key = loadKeys().find(k => k.id === id);
+  if (key) copyToClipboard(key.publicKey, '公钥已复制到剪贴板');
 }
 
 // =========================================================================
-// 新建密钥对
+// 新建密钥
 // =========================================================================
 function openNewKeyModal() {
   document.getElementById('newKeyName').value = '';
@@ -495,9 +1170,9 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
   });
 });
 
-function createNewKeyPair() {
+async function createNewKeyPair() {
   const name = document.getElementById('newKeyName').value.trim();
-  const size = 2048; 
+  const size = 2048;
   if (!name) { alert('请输入项目名称'); return; }
 
   closeModal('newKeyModal');
@@ -507,12 +1182,12 @@ function createNewKeyPair() {
   keys.unshift({
     id: tempId, name: name + ' (生成中...)', size: size,
     privateKey: '', publicKey: '', createdAt: Date.now(),
-    issueCount: 0
+    issueCount: 0, lastIssuedAt: null
   });
-  saveKeys(keys);
+  keyStoreData.keys = keys;
   renderKeyList();
 
-  setTimeout(() => {
+  setTimeout(async () => {
     try {
       const crypt = new JSEncrypt({ default_key_size: size });
       crypt.getKey();
@@ -524,24 +1199,24 @@ function createNewKeyPair() {
         privateKey: crypt.getPrivateKey(),
         publicKey: crypt.getPublicKey(),
         createdAt: Date.now(),
-        issueCount: 0
+        issueCount: 0,
+        lastIssuedAt: null
       };
 
-      const keys = loadKeys().filter(k => k.id !== tempId);
-      keys.unshift(newKey);
-      saveKeys(keys);
-
+      const nextKeys = loadKeys().filter(k => k.id !== tempId);
+      nextKeys.unshift(newKey);
       activeKeyId = newKey.id;
-      saveActiveKeyId(activeKeyId);
+      await saveKeys(nextKeys);
+      await saveActiveKeyId(activeKeyId);
 
       renderKeySelector();
       renderKeyList();
       updateKeyStatus();
-
+      renderKeyStoreMeta();
       viewKeyDetail(newKey.id);
     } catch (e) {
-      const keys = loadKeys().filter(k => k.id !== tempId);
-      saveKeys(keys);
+      const nextKeys = loadKeys().filter(k => k.id !== tempId);
+      await saveKeys(nextKeys);
       renderKeyList();
       alert('密钥生成失败: ' + e.message);
     }
@@ -551,8 +1226,6 @@ function createNewKeyPair() {
 // =========================================================================
 // 查看密钥详情
 // =========================================================================
-let viewingKey = null;
-
 function viewKeyDetail(id) {
   const key = loadKeys().find(k => k.id === id);
   if (!key) return;
@@ -564,15 +1237,6 @@ function viewKeyDetail(id) {
   document.getElementById('keyDetailModal').classList.add('show');
 }
 
-function exportDetailKey(type) {
-  if (!viewingKey) return;
-  const content = type === 'private' ? viewingKey.privateKey : viewingKey.publicKey;
-  const filename = type === 'private'
-    ? `${viewingKey.name}_private_key.pem`
-    : `${viewingKey.name}_public_key.pem`;
-  downloadFile(filename, content);
-}
-
 function copyDetailKey(type) {
   if (!viewingKey) return;
   const content = type === 'private' ? viewingKey.privateKey : viewingKey.publicKey;
@@ -582,8 +1246,8 @@ function copyDetailKey(type) {
 // =========================================================================
 // 导入已有私钥
 // =========================================================================
-function importExistingKey() {
-  const name = prompt('请为此密钥对命名：');
+async function importExistingKey() {
+  const name = prompt('请为此密钥命名：');
   if (!name) return;
 
   const privateKeyText = prompt('请粘贴完整的私钥内容（-----BEGIN RSA PRIVATE KEY----- ... -----END RSA PRIVATE KEY-----）：');
@@ -605,24 +1269,25 @@ function importExistingKey() {
       privateKey: crypt.getPrivateKey(),
       publicKey: pubKey,
       createdAt: Date.now(),
-      issueCount: 0
+      issueCount: 0,
+      lastIssuedAt: null
     };
 
     const keys = loadKeys();
     keys.unshift(newKey);
-    saveKeys(keys);
     activeKeyId = newKey.id;
-    saveActiveKeyId(activeKeyId);
+    await saveKeys(keys);
+    await saveActiveKeyId(activeKeyId);
 
     renderKeySelector();
     renderKeyList();
     updateKeyStatus();
+    renderKeyStoreMeta();
     alert('导入成功！');
   } catch (e) {
     alert('导入失败: ' + e.message);
   }
 }
-
 // =========================================================================
 // RSA 私钥签名算法
 // =========================================================================
@@ -670,10 +1335,15 @@ function rsaSignRaw(jsEncryptInstance, message) {
 // =========================================================================
 // 授权码生成
 // =========================================================================
-function generateLicense() {
+async function generateLicense() {
+  if (!keyStoreHandle && !fallbackMode) {
+    showResult('error', '❌ 未绑定密钥库', '请先创建或打开本地 JSON 密钥库');
+    return;
+  }
+
   const key = getActiveKey();
   if (!key) {
-    showResult('error', '❌ 未选择密钥', '请先在上方选择一个密钥对');
+    showResult('error', '❌ 未选择密钥', '请先在上方选择一个密钥');
     return;
   }
 
@@ -712,11 +1382,12 @@ function generateLicense() {
     const ki = keys.find(k => k.id === key.id);
     if (ki) {
       ki.issueCount = (ki.issueCount || 0) + 1;
-      saveKeys(keys);
+      ki.lastIssuedAt = Date.now();
+      await saveKeys(keys);
     }
 
     showResult('success', '✅ 授权码生成成功', licenseCode,
-      `<dt>密钥对</dt><dd>${escHtml(key.name)}</dd>
+      `<dt>密钥列表</dt><dd>${escHtml(key.name)}</dd>
        <dt>机器码</dt><dd>${escHtml(machineCode)}</dd>
        <dt>到期日期</dt><dd>${expiryStr}</dd>
        <dt>剩余天数</dt><dd>${validDays} 天</dd>
@@ -725,6 +1396,7 @@ function generateLicense() {
 
     renderKeySelector();
     renderKeyList();
+    renderKeyStoreMeta();
   } catch (e) {
     showResult('error', '❌ 生成失败', e.message);
   }
@@ -750,8 +1422,8 @@ function copyLicense(buttonElement) {
 // =========================================================================
 // 工具函数
 // =========================================================================
-function downloadFile(filename, content) {
-  const blob = new Blob([content], { type: 'text/plain' });
+function downloadFile(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType || 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename; a.click();

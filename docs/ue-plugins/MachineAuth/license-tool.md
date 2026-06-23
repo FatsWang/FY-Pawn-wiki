@@ -6,5 +6,5 @@
 
 <iframe 
   src="/ue-plugins/MachineAuth/license_tool.html" 
-  style="width: 100%; height: 900px; border: none; border-radius: 12px;">
+  style="width: 100%; height: 1080px; border: none; border-radius: 12px;">
 </iframe>
