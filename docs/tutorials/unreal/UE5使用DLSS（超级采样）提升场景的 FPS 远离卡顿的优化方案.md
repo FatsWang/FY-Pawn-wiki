@@ -121,7 +121,7 @@ DLSS 3.5 新增特性，专注于优化光线追踪（Ray Tracing）效果，通
 
 
 
-# 关于与Gemini Pro 5000 显卡兼容性和性能优化的 FAQ
+# 关于与Gemini
 
 
 ### 1. 开启 DLSS 对于 15K 分辨率有优化吗？

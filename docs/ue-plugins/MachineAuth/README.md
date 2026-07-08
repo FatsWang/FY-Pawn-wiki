@@ -4,7 +4,7 @@
 > 引擎：Unreal Engine 5.6.0  
 > 模块：Runtime  
 > 平台：Win64  
-> 更新日期：2026-06-23
+> 更新日期：2026-07-08 16:52:07
 
 WPPMachineAuth 是一款 Unreal Engine 5 机器授权插件，用于把 UE 项目、插件或数字孪生交付程序绑定到指定机器运行。它提供 RSA-2048 授权码验证、机器码绑定、本地 AES-256 加密缓存、影子文件防篡改、网络授时和使用次数统计。
 
@@ -62,21 +62,7 @@ YourProject/
         └── Tools/
 ```
 
-打开项目后启用插件，重新生成项目文件并编译。
-
-插件自己的 `WPPMachineAuth.Build.cs` 已经声明 `Core`、`CoreUObject`、`Engine`、`Json`、`UMG`、`OpenSSL`、`ApplicationCore`、`HTTP`、`JsonUtilities`、`Slate`、`SlateCore`、`SSL` 等依赖。普通蓝图接入通常不需要在项目 Build.cs 里额外声明这些依赖。
-
-如果你的 C++ 模块要直接调用插件 API，在项目模块中加入：
-
-```csharp
-PublicDependencyModuleNames.AddRange(new string[]
-{
-    "Core",
-    "CoreUObject",
-    "Engine",
-    "WPPMachineAuth"
-});
-```
+![](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/%E6%8F%92%E4%BB%B6%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95.png)
 
 ### 2. 创建本地 JSON 密钥库
 
@@ -85,8 +71,7 @@ PublicDependencyModuleNames.AddRange(new string[]
 ```text
 Tools/LicenseGenerator/license_tool.html
 ```
-
-建议使用 Chrome 或 Edge。当前生成器通过 File System Access API 直接读写你选择的本地 JSON 密钥库文件，并使用 IndexedDB 保存文件句柄和恢复状态。私钥不再长期保存在浏览器 `localStorage` 中。
+![授权插件目录](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/授权插件目录.png)
 
 第一次打开时：
 
@@ -94,18 +79,20 @@ Tools/LicenseGenerator/license_tool.html
 2. 选择保存位置，例如 `wpp-machine-auth-keys.json`。
 3. 进入工具主界面。
 4. 在“密钥管理”中新建项目密钥。
-
-如果你以前用过旧版工具，页面检测到旧 `localStorage` 密钥后，可以点击迁移按钮，把旧密钥一次性写入 JSON 密钥库，并清理旧缓存。
+![授权码加载本地json界面](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/授权码加载本地json界面.png)
 
 ### 3. 新建项目密钥
 
 1. 打开“密钥管理”。
+  
 2. 点击“新建密钥”。
+  
 3. 输入项目名称。
 4. 工具生成固定 2048 位 RSA 密钥对。
 5. 打开密钥详情，复制公钥。
 
 JSON 密钥库会记录每个密钥的项目名、密钥长度、签发次数和最后签发时间。需要留档时，也可以用“备份导出”保存一份备份 JSON。
+ ![新建密钥界面](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/新建密钥界面.png)
 
 ### 4. 在 UE Widget 中配置公钥
 
@@ -121,14 +108,9 @@ WPPMachineAuthWidget
 - 在 `Create Widget` 节点上通过 `RSAPublicKey` 引脚传入。
 
 `RSAPublicKey` 已设置 `ExposeOnSpawn = true`。常规接入只需要配置这个字段，不要把内部总配置 `AuthConfig` 当作普通蓝图创建参数使用。
+![UE蓝图完整流程](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/UE蓝图完整流程.png)
 
-公钥必须保留完整 PEM 头尾：
 
-```text
------BEGIN PUBLIC KEY-----
-...
------END PUBLIC KEY-----
-```
 
 ### 5. 创建授权 UI 控件
 
@@ -143,6 +125,7 @@ WPPMachineAuthWidget
 | `TextBlock` | `StatusText` | 显示验证、成功、失败信息 |
 
 这些控件在 C++ 中都是 `OptionalWidget`，不放也能构造 Widget；但缺少对应控件时，内置 UI 行为不会执行。
+![20260708163411](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708163411.png)
 
 ### 6. 绑定授权结果
 
@@ -167,6 +150,8 @@ OnMachineAuthResult
 ```
 
 首次运行没有本地授权缓存时，通常会收到类似 `[Validation] License cache not found` 的失败消息，这是正常状态，保留授权界面等待客户激活即可。
+![UE蓝图完整流程](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/UE蓝图完整流程.png)
+
 
 ## 签发和激活授权码
 
@@ -182,6 +167,7 @@ OnMachineAuthResult
 - 设备 ID 哈希
 
 最终会计算 MD5，并截取 `MachineCodeLength` 指定长度，默认 `16`，可配置范围 `8` 到 `32`。
+![UE授权界面](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/UE授权界面.png)
 
 ### 开发者侧签发授权码
 
@@ -194,18 +180,9 @@ OnMachineAuthResult
 5. 设置最大次数，`-1` 表示不限。
 6. 点击“生成授权码”。
 7. 把生成结果发给客户。
+ ![生成授权码界面](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/生成授权码界面.png)
 
-生成器写入授权码的 JSON 字段为：
 
-```json
-{
-  "MachineCode": "A1B2C3D4E5F6G7H8",
-  "ExpiryDate": 1781712000,
-  "MaxUsage": -1
-}
-```
-
-随后工具使用 RSA 私钥执行签发，输出 Base64 授权码。
 
 ### 客户侧激活
 
@@ -229,6 +206,7 @@ OnMachineAuthResult
 | `OnMachineAuthResult(bool bSuccess, FString Source, FString Message)` | 授权验证、激活、配置错误等最终结果 |
 
 `Source` 常见值包括 `Validation`、`Activation`、`Network Time`、`License Config`、`Machine Code Config`、`Storage Config`、`Time Config`、`AntiCheat Config`。
+![20260708163658](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708163658.png)
 
 ### 常用函数
 
@@ -245,38 +223,8 @@ OnMachineAuthResult
 
 `Configure...` 函数只更新配置，不主动重新验证授权。普通蓝图项目优先使用 `RSAPublicKey` 字段。
 
-## C++ API
 
-如果你不使用 UMG Widget，可以直接调用 `FWPPMachineAuthService`。服务层不负责网络请求，你需要自己传入可信时间戳。
-
-```cpp
-#include "WPPMachineAuthService.h"
-
-FWPPMachineAuthSettings Settings;
-Settings.License.RSAPublicKey = TEXT(R"(-----BEGIN PUBLIC KEY-----
-...
------END PUBLIC KEY-----)");
-
-FString ErrorLog;
-const int64 TrustedTimestamp = FDateTime::UtcNow().ToUnixTimestamp();
-const bool bIsNetworkTime = false;
-
-const bool bValid = FWPPMachineAuthService::ValidateCachedLicense(
-    Settings,
-    TrustedTimestamp,
-    bIsNetworkTime,
-    ErrorLog
-);
-```
-
-| 函数 | 说明 |
-| --- | --- |
-| `FWPPMachineAuthService::GetMachineCode(Settings)` | 获取机器码 |
-| `FWPPMachineAuthService::ValidateCachedLicense(Settings, TrustedTimestamp, bIsNetworkTime, OutErrorLog)` | 验证本地缓存授权 |
-| `FWPPMachineAuthService::ActivateLicense(Settings, LicenseKey, TrustedTimestamp, bIsNetworkTime, OutErrorLog)` | 激活并保存授权码 |
-| `FWPPMachineAuthService::ClearCachedLicense(Settings)` | 删除本地授权缓存 |
-
-如果时间戳来自你的服务器或可信网络时间，把 `bIsNetworkTime` 设为 `true`。如果使用本地 UTC 时间，把它设为 `false`。
+![78b68199-f69e-40cd-8c52-83e5c19b0430](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/78b68199-f69e-40cd-8c52-83e5c19b0430.png)
 
 ## 配置参考
 
@@ -297,18 +245,10 @@ const bool bValid = FWPPMachineAuthService::ValidateCachedLicense(
 | `NetworkTimeoutSeconds` | `3.0` | HTTP 超时秒数，最低 `0.5` |
 | `bAllowLocalTimeFallback` | `true` | 网络失败或 URL 为空时是否允许使用本地 UTC 时间 |
 
-默认授时接口需要返回：
 
-```json
-{
-  "data": {
-    "t": "1781712000000"
-  }
-}
-```
 
 其中 `t` 是毫秒级 Unix 时间戳。如果替换成自己的授时服务，需要保持这个结构，或修改 `UWPPMachineAuthWidget::OnNetworkTimeResponseReceived()`。
-
+![20260708164245](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708164245.png)
 ### 本地缓存
 
 | 配置 | 默认值 | 说明 |
@@ -323,7 +263,9 @@ const bool bValid = FWPPMachineAuthService::ValidateCachedLicense(
 <ProjectName>_<LocalAesSalt>
 ```
 
+![20260708164622](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708164622.png)
 ### 影子文件和防篡改
+
 
 | 配置 | 默认值 | 说明 |
 | --- | --- | --- |
@@ -349,7 +291,7 @@ const bool bValid = FWPPMachineAuthService::ValidateCachedLicense(
 %LOCALAPPDATA%/Microsoft_Windows_Cache/sys_config.bin
 %LOCALAPPDATA%/Microsoft_Windows_Cache/sys_core_module.dll
 ```
-
+![20260708164452](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708164452.png)
 ### 机器码
 
 | 配置 | 默认值 | 说明 |
@@ -361,7 +303,7 @@ const bool bValid = FWPPMachineAuthService::ValidateCachedLicense(
 | `MachineCodeLength` | `16` | 输出长度，范围 `8` 到 `32` |
 
 如果所有机器码参与因子都关闭，代码会自动回退到电脑名、用户名和系统版本，避免机器码为空。
-
+![20260708164707](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708164707.png)
 ### UI 和本地化
 
 | 配置 | 默认值 | 说明 |
@@ -375,6 +317,9 @@ const bool bValid = FWPPMachineAuthService::ValidateCachedLicense(
 | `StatusNetworkFailedText` | `Network time sync failed, check connection and retry` | 网络授时失败 |
 | `StatusNetworkUrlEmptyText` | `Network time URL not configured` | 授时 URL 为空 |
 | `StatusLimitReachedText` | `License usage limit reached, please obtain a new license` | 使用次数到达上限 |
+
+![20260708163411](https://cdn.jsdelivr.net/gh/FatsWang/FY-Pawn-wiki/docs/images/20260708163411.png)
+
 
 ## 安全说明
 
