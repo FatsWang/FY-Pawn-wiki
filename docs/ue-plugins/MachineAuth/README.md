@@ -66,6 +66,11 @@ YourProject/
 
 ### 2. 创建本地 JSON 密钥库
 
+
+本地html文件和测试加密插件网盘链接： https://pan.baidu.com/s/53kEebDc1rPV4RSIHmHOsRA
+
+--来自百度网盘超级会员v7的分享
+
 双击打开：
 
 ```text
